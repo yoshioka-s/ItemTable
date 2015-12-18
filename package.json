@@ -1,0 +1,31 @@
+{
+  "name": "ItemTable",
+  "version": "0.0.0",
+  "description": "",
+  "main": "scripts/app.jsx",
+  "devDependencies": {
+    "watch": "latest"
+  },
+  "scripts": {
+    "build-js": "browserify scripts/app.jsx -o bundle.js",
+    "build-watch": "watch 'npm run build-js' ."
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yoshioka-s/ItemTable"
+  },
+  "author": "yoshioka-s",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/yoshioka-s/ItemTable/issues"
+  },
+  "dependencies": {
+    "react": "~0.14.3",
+    "react-dom": "~0.14.3"
+  }
+}
