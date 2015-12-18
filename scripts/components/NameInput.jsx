@@ -9,7 +9,6 @@ var NameInput = React.createClass({
     return {name: ''};
   },
   handleNameChange: function (e) {
-    console.log('onChange!');
     this.setState({name: e.target.value});
   },
 
