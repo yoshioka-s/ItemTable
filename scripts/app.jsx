@@ -1,8 +1,14 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var NameInput = require('./components/NameInput.jsx');
+var ItemForm = require('./components/ItemForm.jsx');
 
 ReactDOM.render(
-  <NameInput/>,
+  <ItemForm/>,
   document.getElementById('tableapp')
 );
+// ReactDOM.render(
+//   <ItemForm/>
+//   <SearchBox/>
+//   <ItemList/>,
+//   document.getElementById('tableapp')
+// );

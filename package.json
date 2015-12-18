@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "react": "~0.14.3",
-    "react-dom": "~0.14.3"
+    "react-dom": "~0.14.3",
+    "react-select": "~1.0.0-beta7",
+    "validator": "~4.4.0"
   }
 }
