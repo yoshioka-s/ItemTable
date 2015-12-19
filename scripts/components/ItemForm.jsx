@@ -10,11 +10,15 @@ Validation.extendErrors({
     }
   }
 });
+
 /*
  * input component for new item name
  *
  */
 var ItemForm = React.createClass({
+  propTypes: {
+    onSubmit: React.PropTypes.func.isRequired
+  },
   getInitialState: function () {
     return {
       name: '',
@@ -31,6 +35,7 @@ var ItemForm = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
     console.log('submit ', this.state.name, this.state.column);
+    this.props.onSubmit(this.state);
     this.setState(this.getInitialState());
   },
 

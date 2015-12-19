@@ -1,14 +1,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var ItemForm = require('./components/ItemForm.jsx');
+var MainSection = require('./components/MainSection.jsx');
 
 ReactDOM.render(
-  <ItemForm/>,
+  <MainSection/>,
   document.getElementById('tableapp')
 );
-// ReactDOM.render(
-//   <ItemForm/>
-//   <SearchBox/>
-//   <ItemList/>,
-//   document.getElementById('tableapp')
-// );
