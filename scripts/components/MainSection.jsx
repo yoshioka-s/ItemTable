@@ -27,11 +27,15 @@ var MainSection = React.createClass({
 
     return (
       <div>
-        <ItemForm
-          onSubmit={this._saveItem}
-        />
-        <div>{itemLists}</div>
-        <SearchBox/>
+        <div className='col-sm-4'>
+          <ItemForm
+            onSubmit={this._saveItem}
+          />
+          <SearchBox/>
+        </div>
+        <div className='col-sm-8'>
+          {itemLists}
+        </div>
       </div>
     );
   },

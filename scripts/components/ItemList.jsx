@@ -18,7 +18,7 @@ var ItemList = React.createClass({
       return (<Item>{item.name} x</Item>);
     });
     return (
-      <div>
+      <div className='col-sm-6'>
         <h3>COLUMN {this.props.index + 1}</h3>
         <ul>{items}</ul>
       </div>
