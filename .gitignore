@@ -2,7 +2,3 @@ node_modules
 bundle.js
 stylesheets
 .sass-cache
-fonts/bootstrap
-saas/bootstrap
-scripts/bootstrap
-scripts/bootstrap*
