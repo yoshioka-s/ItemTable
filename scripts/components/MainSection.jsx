@@ -6,7 +6,7 @@ var SearchBox = require('./SearchBox.jsx');
 
 const MAX_COLUMN = 2;
 
-var index = 2;
+var index = 0;
 
 var MainSection = React.createClass({
   getInitialState: function () {
