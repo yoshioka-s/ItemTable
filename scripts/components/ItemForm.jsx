@@ -37,13 +37,11 @@ var ItemForm = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
-    console.log('submit ', this.state.name, this.state.column);
     this.props.onSubmit(this.state);
     this.setState(this.getInitialState());
   },
 
   render: function() {
-    console.log(`RENDER ${this.state.name}`);
     return (
       <Validation.Form className="item-form"
         onSubmit={this.handleSubmit}>

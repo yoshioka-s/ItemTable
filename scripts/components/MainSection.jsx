@@ -6,26 +6,46 @@ var SearchBox = require('./SearchBox.jsx');
 
 const MAX_COLUMN = 2;
 
-var index = 0;
+var allItems = {};  // storage for created items
+var index = 0;      // storage index of a new item
+
+/*
+ * filter allItems whose name contains the string (case insensitive)
+ * @param {string} string
+*/
+function filterItemsBy(string) {
+  return _.filter(allItems, function (item) {
+    return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
+  });
+}
 
 var MainSection = React.createClass({
   getInitialState: function () {
     return {
-      allItems: {}
+      items: {},
+      seachString: ''
     };
   },
 
   render: function() {
     var itemLists = [];
-    var allItems = this.state.allItems;
     var deleteItem = this._deleteItem;
-    // build MAX_COLUMN columns of lists
+    var displayItems = filterItemsBy(this.state.seachString);
+
+    // build MAX_COLUMN columns of ItemLists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
-      var propItems = _.filter(allItems, function (item) {
+      var propItems = _.filter(displayItems, function (item) {
         return Number(item.column) === i;
       });
-      itemLists.push(<ItemList key={i} index={i} items={propItems} deleteItem={deleteItem}/>);
+      itemLists.push(
+        <ItemList
+          key={i}
+          index={i}
+          items={propItems}
+          deleteItem={deleteItem}
+        />
+      );
     });
 
     return (
@@ -34,7 +54,7 @@ var MainSection = React.createClass({
           <ItemForm
             onSubmit={this._saveItem}
           />
-          <SearchBox/>
+        <SearchBox filterBy={this._filterItem}/>
         </div>
         <div className='col-sm-8'>
           {itemLists}
@@ -44,24 +64,36 @@ var MainSection = React.createClass({
   },
 
   /*
-   * add a new item to items and update the list
+   * add a new item to allItems and update the DOM
    * @param {object} new item
   */
   _saveItem: function (item) {
-    var allItems = this.state.allItems;
     item.index = index;
     allItems[index] = item;
     index++;
-    this.setState({allItems: allItems});
+    this.setState({items: allItems});
   },
+
   /*
-   * delete an item from this.state.allItems
+   * delete an item from allItems
    * @param {object} item
   */
   _deleteItem: function (item) {
-    var allItems = this.state.allItems;
     delete allItems[item.index];
-    this.setState({allItems: allItems});
+    this.setState({items: allItems});
+  },
+
+  /*
+   * filter allItems and set displayItem to the result
+   * @param {string} string
+  */
+  _filterItem: function (string) {
+    // var filteredItems = _.filter(allItems, function (item) {
+    //   return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
+    // });
+    // this.setState({items: filteredItems});
+    this.setState({seachString: string});
   }
 });
+
 module.exports = MainSection;
