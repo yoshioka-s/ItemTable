@@ -1,4 +1,5 @@
 var React = require('react');
+// var _ = require('underscore');
 var Item = require('./Item.jsx');
 
 var ItemList = React.createClass({
@@ -7,15 +8,10 @@ var ItemList = React.createClass({
     index: React.PropTypes.number,
     key: React.PropTypes.number
   },
-  getInitialState: function () {
-    return {
-      items: []
-    };
-  },
 
   render: function() {
-    var items = this.state.items.map(function (item) {
-      return (<Item>{item.name} x</Item>);
+    var items = this.props.items.map(function (item, i) {
+      return (<Item item={item} key={i}/>);
     });
     return (
       <div className='col-sm-6'>

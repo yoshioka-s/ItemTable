@@ -19,19 +19,22 @@ var ItemForm = React.createClass({
   propTypes: {
     onSubmit: React.PropTypes.func.isRequired
   },
+
   getInitialState: function () {
     return {
       name: '',
       column: ''
     };
   },
+
   handleNameChange: function (e) {
     this.setState({name: e.target.value});
   },
+
   handleColumnChange: function (e) {
-    console.log('column: ' ,e.target.value);
     this.setState({column: e.target.value});
   },
+
   handleSubmit: function (e) {
     e.preventDefault();
     console.log('submit ', this.state.name, this.state.column);
@@ -40,6 +43,7 @@ var ItemForm = React.createClass({
   },
 
   render: function() {
+    console.log(`RENDER ${this.state.name}`);
     return (
       <Validation.Form className="item-form"
         onSubmit={this.handleSubmit}>

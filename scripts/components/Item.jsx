@@ -2,21 +2,13 @@ var React = require('react');
 
 var Item = React.createClass({
   propTypes: {
-    items: React.PropTypes.array,
-    index: React.PropTypes.number,
-    key: React.PropTypes.number
-  },
-  getInitialState: function () {
-    return {
-        name: '',
-        column: ''
-    };
+    item: React.PropTypes.object,
   },
 
   render: function() {
     return (
       <li>
-        {this.state.name} x
+        {this.props.item.name}
       </li>
     );
   }
