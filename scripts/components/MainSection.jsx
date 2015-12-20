@@ -6,23 +6,26 @@ var SearchBox = require('./SearchBox.jsx');
 
 const MAX_COLUMN = 2;
 
+var index = 0;
+
 var MainSection = React.createClass({
   getInitialState: function () {
     return {
-      allItems: []
+      allItems: {}
     };
   },
 
   render: function() {
     var itemLists = [];
     var allItems = this.state.allItems;
+    var deleteItem = this._deleteItem;
     // build MAX_COLUMN columns of lists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
       var propItems = _.filter(allItems, function (item) {
         return Number(item.column) === i;
       });
-      itemLists.push(<ItemList key={i} index={i} items={propItems} />);
+      itemLists.push(<ItemList key={i} index={i} items={propItems} deleteItem={deleteItem}/>);
     });
 
     return (
@@ -42,10 +45,22 @@ var MainSection = React.createClass({
 
   /*
    * add a new item to items and update the list
-   * @param {object} new itme
+   * @param {object} new item
   */
   _saveItem: function (item) {
-    var allItems = this.state.allItems.concat(item);
+    var allItems = this.state.allItems;
+    item.index = index;
+    allItems[index] = item;
+    index++;
+    this.setState({allItems: allItems});
+  },
+  /*
+   * delete an item from this.state.allItems
+   * @param {object} item
+  */
+  _deleteItem: function (item) {
+    var allItems = this.state.allItems;
+    delete allItems[item.index];
     this.setState({allItems: allItems});
   }
 });
