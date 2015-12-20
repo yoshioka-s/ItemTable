@@ -4,7 +4,7 @@
   "description": "",
   "main": "scripts/app.jsx",
   "scripts": {
-    "start": "gem install compass & gem install bootstrap-sass & npm run build",
+    "start": "gem install compass & gem install bootstrap-sass",
     "build": "npm run build-js & npm run build-sass",
     "build-js": "browserify scripts/app.jsx -o bundle.js",
     "build-sass": "compass compile .",
