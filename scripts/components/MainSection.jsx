@@ -9,18 +9,18 @@ const MAX_COLUMN = 2;
 var MainSection = React.createClass({
   getInitialState: function () {
     return {
-      items: []
+      allItems: []
     };
   },
 
   render: function() {
     var itemLists = [];
-    var allItems = this.state.items;
+    var allItems = this.state.allItems;
     // build MAX_COLUMN columns of lists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
       var propItems = _.filter(allItems, function (item) {
-        return item.column === i;
+        return Number(item.column) === i;
       });
       itemLists.push(<ItemList key={i} index={i} items={propItems} />);
     });
@@ -45,7 +45,8 @@ var MainSection = React.createClass({
    * @param {object} new itme
   */
   _saveItem: function (item) {
-    this.state.items.push(item);
+    var allItems = this.state.allItems.concat(item);
+    this.setState({allItems: allItems});
   }
 });
 module.exports = MainSection;
