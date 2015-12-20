@@ -9,22 +9,33 @@ const MAX_COLUMN = 2;
 var allItems = {};  // storage for created items
 var index = 0;      // storage index of a new item
 
+/*
+ * filter allItems whose name contains the string (case insensitive)
+ * @param {string} string
+*/
+function filterItemsBy(string) {
+  return _.filter(allItems, function (item) {
+    return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
+  });
+}
+
 var MainSection = React.createClass({
   getInitialState: function () {
     return {
-      items: {}
+      items: {},
+      seachString: ''
     };
   },
 
   render: function() {
     var itemLists = [];
-    var items = this.state.items;
     var deleteItem = this._deleteItem;
+    var displayItems = filterItemsBy(this.state.seachString);
 
     // build MAX_COLUMN columns of ItemLists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
-      var propItems = _.filter(items, function (item) {
+      var propItems = _.filter(displayItems, function (item) {
         return Number(item.column) === i;
       });
       itemLists.push(
@@ -77,10 +88,12 @@ var MainSection = React.createClass({
    * @param {string} string
   */
   _filterItem: function (string) {
-    var filteredItems = _.filter(allItems, function (item) {
-      return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
-    });
-    this.setState({items: filteredItems});
+    // var filteredItems = _.filter(allItems, function (item) {
+    //   return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
+    // });
+    // this.setState({items: filteredItems});
+    this.setState({seachString: string});
   }
 });
+
 module.exports = MainSection;
