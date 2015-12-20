@@ -3,16 +3,23 @@
   "version": "0.0.0",
   "description": "",
   "main": "scripts/app.jsx",
-  "devDependencies": {
-    "watch": "latest"
-  },
   "scripts": {
+    "start": "gem install compass & gem install bootstrap-sass",
+    "build": "npm run build-js & npm run build-sass",
     "build-js": "browserify scripts/app.jsx -o bundle.js",
-    "build-watch": "watch 'npm run build-js' ."
+    "build-sass": "compass compile .",
+    "watch": "npm run watch-js & npm run watch-sass",
+    "watch-js": "watchify scripts/app.jsx -o bundle.js .",
+    "watch-sass": "compass watch"
   },
   "browserify": {
     "transform": [
-      "reactify"
+      "babelify"
+    ]
+  },
+  "watchify": {
+    "transform": [
+      "babelify"
     ]
   },
   "repository": {
@@ -24,8 +31,18 @@
   "bugs": {
     "url": "https://github.com/yoshioka-s/ItemTable/issues"
   },
+  "devDependencies": {
+    "babelify": "~7.2.0",
+    "babel-preset-react": "~6.3.13",
+    "babel-preset-es2015": "~6.3.13",
+    "watchify": "~3.6.1"
+  },
   "dependencies": {
     "react": "~0.14.3",
-    "react-dom": "~0.14.3"
+    "react-dom": "~0.14.3",
+    "validator": "~4.4.0",
+    "underscore": "~1.8.3",
+    "bootstrap-sass": "~3.3.6",
+    "react-validation": "~1.3.1"
   }
 }
