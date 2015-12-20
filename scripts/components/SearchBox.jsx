@@ -2,7 +2,8 @@ var React = require('react');
 
 var Item = React.createClass({
   propTypes: {
-    items: React.PropTypes.array
+    items: React.PropTypes.array,
+    filterBy: React.PropTypes.function
   },
 
   getInitialState: function () {
@@ -11,12 +12,17 @@ var Item = React.createClass({
     };
   },
 
+  handleSearch: function (e) {
+    this.props.filterBy(e.target.value);
+  },
+
   render: function() {
     return (
       <div>
         SEARCH AN ITEM
         <input
-          placeholder="SEARCH"/>
+          placeholder="SEARCH"
+          onChange={this.handleSearch}/>
       </div>
     );
   }
