@@ -11,11 +11,7 @@ body {
     size: $font-size-base;
   }
 }
-input {
-  @include base-input;
-  background-color: $base-gray;
-}
-select{
+input, button {
   @include base-input;
   background-color: $base-gray;
 }
@@ -80,21 +76,38 @@ header {
 .item-form {
   position: relative;
   height: $list-height - $row-height * 2;
+  .column-input {
+    width: 100%;
+    button {
+      text-align: left;
+    }
+    .dropdown-menu {
+      width: 100%;
+    }
+  }
   .caret {
     position: absolute;
-    top: $row-height + 50px;
+    top: ($row-height + 23px) / 2;
     right: 8px;
   }
   .submit-btn {
     position: absolute;
     bottom: 0;
-    background-color: inherit;
-    color: $main-color;
+    left: 0;
     font-weight: 400;
-    &:hover{
-      background-color: $lighter-gray;
-      color: $background-color;
-      cursor: pointer;
+    &.valid {
+      background-color: inherit;
+      color: $main-color;
+      &:hover{
+        background-color: $lighter-gray;
+        color: $background-color;
+        cursor: pointer;
+      }
+    }
+    &.invalid {
+      background-color: inherit;
+      color: $main-color;
+      cursor: not-allowed;
     }
   }
 }

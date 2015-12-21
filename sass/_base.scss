@@ -59,9 +59,3 @@ $list-height: $row-height * 8 + $base-border-width * 4;
     weight: 200;
   }
 }
-
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.eot?1450572511);
-  src: url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.eot?&1450572511#iefix) format("embedded-opentype"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.woff2?1450572511) format("woff2"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.woff?1450572511) format("woff"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.ttf?1450572511) format("truetype"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.svg?1450572511#glyphicons_halflingsregular) format("svg");
-}
