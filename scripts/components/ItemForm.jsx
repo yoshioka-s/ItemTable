@@ -1,5 +1,6 @@
 var React = require('react');
 var _ = require('underscore');
+
 /*
  * validation for a new item
  * @params {object} item
@@ -34,7 +35,6 @@ var ItemForm = React.createClass({
   },
 
   handleColumnChange: function (column) {
-    console.log(this.columnInput);
     this.setState({column: column});
   },
 
