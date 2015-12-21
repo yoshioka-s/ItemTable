@@ -10,17 +10,6 @@ var allItems = {};  // storage for created items
 var index = 0;      // storage index of a new item
 
 /*
- * filter allItems whose name contains the string (case insensitive).
- * this does not filter newly created items
- * @param {string} string
-*/
-function filterItemsBy(string) {
-  return _.filter(allItems, function (item) {
-    return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
-  });
-}
-
-/*
  * The main component of the app.
  * keep track of all items created by the user.
  * @param {string} string
@@ -29,7 +18,6 @@ var MainSection = React.createClass({
   getInitialState: function () {
     return {
       items: {},
-      seachString: ''
     };
   },
 
@@ -37,13 +25,11 @@ var MainSection = React.createClass({
     var itemLists = [];
     var deleteItem = this._deleteItem;
     var displayItems = this.state.items;
-    console.log(displayItems);
 
     // build MAX_COLUMN columns of ItemLists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
       var propItems = _.filter(displayItems, function (item, key) {
-        console.log(key);
         return Number(item.column) === i;
       });
       itemLists.push(
@@ -84,7 +70,6 @@ var MainSection = React.createClass({
     // add the new item on displaying items
     var displayItems = this.state.items;
     displayItems[index] = item;
-    console.log(`saved item! ${item}`);
     index++;
     // update the state
     this.setState({items: displayItems});
@@ -108,19 +93,14 @@ var MainSection = React.createClass({
   _updateFilter: function (string) {
     var displayItems = _.chain(allItems)
       .filter(function (item) {
-        console.log(`filter: ${item.index}`);
         return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
-      }).value();
-    console.log(displayItems);
-    displayItems = _.chain(displayItems)
+      })
       .reduce(function (memo, item) {  // convert the array to an object
-        console.log(`reduce: ${item.index}`);
         memo[item.index] = item;
         return memo;
       }, {})
       .value();
-    console.log(displayItems);
-    this.setState({seachString: string, items: displayItems});
+    this.setState({items: displayItems});
   }
 });
 

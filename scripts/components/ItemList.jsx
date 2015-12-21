@@ -5,8 +5,8 @@ var Item = require('./Item.jsx');
 var ItemList = React.createClass({
   propTypes: {
     items: React.PropTypes.array,
-    index: React.PropTypes.number,
-    deleteItem: React.PropTypes.function
+    index: React.PropTypes.number.isRequired,
+    deleteItem: React.PropTypes.func.isRequired
   },
 
   render: function() {

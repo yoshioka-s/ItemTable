@@ -2,14 +2,7 @@ var React = require('react');
 
 var Item = React.createClass({
   propTypes: {
-    items: React.PropTypes.array,
-    updateFilter: React.PropTypes.function
-  },
-
-  getInitialState: function () {
-    return {
-        items: []
-    };
+    updateFilter: React.PropTypes.func.isRequired
   },
 
   handleSearch: function (e) {

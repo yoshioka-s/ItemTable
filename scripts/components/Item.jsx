@@ -2,9 +2,9 @@ var React = require('react');
 
 var Item = React.createClass({
   propTypes: {
-    item: React.PropTypes.object,
-    isEven: React.PropTypes.boolean,
-    deleteItem: React.PropTypes.function
+    item: React.PropTypes.object.isRequired,
+    isEven: React.PropTypes.bool.isRequired,
+    deleteItem: React.PropTypes.func.isRequired
   },
 
   handleDelete: function (e) {
