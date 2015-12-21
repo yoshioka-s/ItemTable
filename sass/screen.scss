@@ -80,6 +80,11 @@ header {
 .item-form {
   position: relative;
   height: $list-height - $row-height * 2;
+  .caret {
+    position: absolute;
+    top: $row-height + 50px;
+    right: 8px;
+  }
   .submit-btn {
     position: absolute;
     bottom: 0;
