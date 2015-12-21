@@ -55,6 +55,19 @@ var ItemForm = React.createClass({
           value={this.state.name}
           onChange={this.handleNameChange}
         />
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Dropdown
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+          </div>
         <Validation.Select className="column-select"
           name="column"
           value={this.state.column}
@@ -65,6 +78,7 @@ var ItemForm = React.createClass({
           <option value="">CHOOSE COLUMN</option>
           <option value="0">1</option>
           <option value="1">2</option>
+          <span className="caret"/>
         </Validation.Select>
         <Validation.Button className="submit-btn"
           type="submit"

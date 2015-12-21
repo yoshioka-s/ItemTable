@@ -1,5 +1,67 @@
 @import "compass/reset";
 @import "compass/utilities";
 
+/*
+  Fonts
+*/
 $base-font: Helvetica;
 $title-font: 'Merriweather';
+$font-size-base: 16px;
+$font-size-title: 45px;
+$font-size-small: 12px;
+/*
+  Colors
+*/
+$main-color: rgb(255, 255, 255);
+$header-color: rgb(154, 224, 210);
+$background-color: rgba(116, 131, 143, 1);
+$base-gray: lighten($background-color, 15%);
+$lighter-gray: lighten($background-color, 30%);
+$light-gray: lighten($background-color, 40%);
+$darker-gray: darken($background-color, 10%);
+
+/*
+  Sizings and Positionings
+*/
+$row-height: 60px;
+$row-height-short: 40px;
+$base-border-width: 3px;
+$list-height: $row-height * 8 + $base-border-width * 4;
+
+
+// common styling of basic elements
+@mixin base-component {
+  width: 100%;
+  height: $row-height;
+  padding: {
+    top: 23px;
+  }
+}
+
+// common styling of input elements
+@mixin base-input {
+  @include base-component;
+  margin: {
+    top: 10px;
+    bottom: 10px;
+  }
+  padding: {
+    top: 0;
+    left: 10px;
+    right: 10px;
+  }
+  border: {
+    width: $base-border-width;
+    style: solid;
+    color: $main-color;
+  }
+  font: {
+    weight: 200;
+  }
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.eot?1450572511);
+  src: url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.eot?&1450572511#iefix) format("embedded-opentype"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.woff2?1450572511) format("woff2"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.woff?1450572511) format("woff"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.ttf?1450572511) format("truetype"), url(/media/Storage/Projects/tutorials/ItemTable/fonts/bootstrap/glyphicons-halflings-regular.svg?1450572511#glyphicons_halflingsregular) format("svg");
+}

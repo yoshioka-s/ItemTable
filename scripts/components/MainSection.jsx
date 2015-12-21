@@ -6,7 +6,7 @@ var SearchBox = require('./SearchBox.jsx');
 
 const MAX_COLUMN = 2;
 
-var allItems = {};  // storage for created items
+var allItems = {0: {index:0, name:'seed1', column: 0},1:{index:1, name:'seed2', column: 0}};  // storage for created items
 var index = 0;      // storage index of a new item
 
 /*
@@ -50,13 +50,15 @@ var MainSection = React.createClass({
 
     return (
       <div>
-        <div className='col-sm-4'>
+        <div className='bar'>ADD AN ITEM</div>
+        <div className='input-section'>
           <ItemForm
             onSubmit={this._saveItem}
           />
-        <SearchBox filterBy={this._filterItem}/>
+        <SearchBox
+            filterBy={this._filterItem}/>
         </div>
-        <div className='col-sm-8'>
+        <div className='display-section'>
           {itemLists}
         </div>
       </div>

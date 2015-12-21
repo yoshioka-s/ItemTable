@@ -12,11 +12,11 @@ var ItemList = React.createClass({
   render: function() {
     var deleteItem = this.props.deleteItem;
     var items = this.props.items.map(function (item, i) {
-      return (<Item item={item} key={i} deleteItem={deleteItem}/>);
+      return (<Item item={item} key={i} deleteItem={deleteItem} isEven={i % 2 === 0}/>);
     });
     return (
-      <div className='col-sm-6'>
-        <h3>COLUMN {this.props.index + 1}</h3>
+      <div className='item-list'>
+        <h3 className='col-header'>COLUMN {this.props.index + 1}</h3>
         <ul>{items}</ul>
       </div>
     );
