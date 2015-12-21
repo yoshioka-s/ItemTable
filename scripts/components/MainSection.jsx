@@ -48,6 +48,7 @@ var MainSection = React.createClass({
         <div className='input-section'>
           <ItemForm
             onSubmit={this._saveItem}
+            maxColumn={MAX_COLUMN}
           />
           <SearchBox
             updateFilter={this._updateFilter}/>

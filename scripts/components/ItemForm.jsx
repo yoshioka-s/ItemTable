@@ -1,11 +1,11 @@
 var React = require('react');
-
+var _ = require('underscore');
 /*
  * validation for a new item
  * @params {object} item
 */
 function isValid (item) {
-  return item.name.trim().length > 0 && item.column.length > 0;
+  return item.name.trim().length > 0 && item.column > -1;
 }
 
 /*
@@ -14,13 +14,14 @@ function isValid (item) {
  */
 var ItemForm = React.createClass({
   propTypes: {
+    maxColumn: React.PropTypes.number.isRequired,
     onSubmit: React.PropTypes.func.isRequired
   },
 
   getInitialState: function () {
     return {
       name: '',
-      column: ''
+      column: 'CHOOSE COLUMN'
     };
   },
 
@@ -32,8 +33,9 @@ var ItemForm = React.createClass({
     this.setState({name: e.target.value});
   },
 
-  handleColumnChange: function (e) {
-    this.setState({column: e.target.value});
+  handleColumnChange: function (column) {
+    console.log(this.columnInput);
+    this.setState({column: column});
   },
 
   handleSubmit: function (e) {
@@ -55,7 +57,19 @@ var ItemForm = React.createClass({
   },
 
   render: function() {
-    console.log(String(!isValid(this.state)));
+    var columnOptions = [];
+    var handleColumnChange = this.handleColumnChange;
+    _.times(this.props.maxColumn, function (i) {
+      columnOptions.push(
+        <li key={i}>
+          <a href="#"
+            value={i}
+            onClick={() => {handleColumnChange(i)}}>
+            {i + 1}
+          </a>
+        </li>
+      );
+    });
     var classNames = 'submit-btn';
     classNames += isValid(this.state) ? ' valid' : ' invalid';
 
@@ -69,16 +83,19 @@ var ItemForm = React.createClass({
           value={this.state.name}
           onChange={this.handleNameChange}
         />
-      <select className="column-select"
-          name="column"
-          ref={ (ref) => this.columnInput = ref }
-          value={this.state.column}
-          onChange={this.handleColumnChange}>
-          <option value="">CHOOSE COLUMN</option>
-          <option value="0">1</option>
-          <option value="1">2</option>
-        </select>
-        <span className="caret"/>
+        <div className="btn-group column-input">
+          <button className="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ref={ (ref) => this.columnInput = ref }>
+            {isNaN(this.state.column) ? this.state.column : this.state.column + 1}
+            <span className="caret"></span>
+          </button>
+          <ul className="dropdown-menu">
+            {columnOptions}
+          </ul>
+        </div>
         <input className={classNames}
           type="submit"
           value="ADD ITEM"
