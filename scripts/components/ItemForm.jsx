@@ -1,15 +1,12 @@
 var React = require('react');
-var Validation = require('react-validation');
-var validator = require('validator');
 
-Validation.extendErrors({
-  isRequired: {
-    message: 'required',
-    rule: function (value) {
-      return Boolean(validator.trim(value));
-    }
-  }
-});
+/*
+ * validation for a new item
+ * @params {object} item
+*/
+function isValid (item) {
+  return item.name.trim().length > 0 && item.column.length > 0;
+}
 
 /*
  * input component for new item name
@@ -27,6 +24,10 @@ var ItemForm = React.createClass({
     };
   },
 
+  componentDidMount: function () {
+    this.nameInput.focus();
+  },
+
   handleNameChange: function (e) {
     this.setState({name: e.target.value});
   },
@@ -37,43 +38,54 @@ var ItemForm = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
+    if (!isValid(this.state)) {
+      // set focus on un-filled input
+      if (this.state.column.length < 1) {
+        this.columnInput.focus();
+      } else {
+        this.nameInput.focus();
+      }
+      return;
+    }
+
     this.props.onSubmit(this.state);
-    this.setState(this.getInitialState());
+    // reset only name
+    this.setState({name: ''});
+    this.nameInput.focus();
   },
 
   render: function() {
+    console.log(String(!isValid(this.state)));
+    var classNames = 'submit-btn';
+    classNames += isValid(this.state) ? ' valid' : ' invalid';
+
     return (
-      <Validation.Form className="item-form"
+      <form className="item-form"
         onSubmit={this.handleSubmit}>
-        <Validation.Input className="name-input"
+        <input className="name-input"
           name="name"
-          blocking='input'
-          validations={[
-            {rule: 'isRequired',errorMessage: 'mandatory field'}
-          ]}
+          ref={ (ref) => this.nameInput = ref }
           placeholder="ENTER ITEM"
           value={this.state.name}
           onChange={this.handleNameChange}
         />
-        <Validation.Select className="column-select"
+      <select className="column-select"
           name="column"
+          ref={ (ref) => this.columnInput = ref }
           value={this.state.column}
-          validations={[
-            {rule: 'isRequired',errorMessage: 'mandatory field'}
-          ]}
           onChange={this.handleColumnChange}>
           <option value="">CHOOSE COLUMN</option>
           <option value="0">1</option>
           <option value="1">2</option>
-        </Validation.Select>
+        </select>
         <span className="caret"/>
-        <Validation.Button className="submit-btn"
+        <input className={classNames}
           type="submit"
           value="ADD ITEM"
-          blocking="button"
+          // disabled={String(!isValid(this.state))}
           onClick={this.handleSubmit}
         />
-      </Validation.Form>
+    </form>
     );
   }
 });

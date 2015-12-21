@@ -88,13 +88,21 @@ header {
   .submit-btn {
     position: absolute;
     bottom: 0;
-    background-color: inherit;
-    color: $main-color;
+    left: 0;
     font-weight: 400;
-    &:hover{
-      background-color: $lighter-gray;
-      color: $background-color;
-      cursor: pointer;
+    &.valid {
+      background-color: inherit;
+      color: $main-color;
+      &:hover{
+        background-color: $lighter-gray;
+        color: $background-color;
+        cursor: pointer;
+      }
+    }
+    &.invalid {
+      background-color: inherit;
+      color: $main-color;
+      cursor: not-allowed;
     }
   }
 }
