@@ -3,6 +3,7 @@ var React = require('react');
 var Item = React.createClass({
   propTypes: {
     item: React.PropTypes.object,
+    isEven: React.PropTypes.boolean,
     deleteItem: React.PropTypes.function
   },
 
@@ -11,12 +12,16 @@ var Item = React.createClass({
   },
 
   render: function() {
+    var color = this.props.isEven ? 'even' : 'odd';
+
     return (
-      <li>
+      <li className={`item ${color}`}>
         {this.props.item.name}
-        <span className="del-btn pull-right"
+        <span className="btn del-btn"
           onClick={this.handleDelete}
-          >X</span>
+          >
+          <i className="glyphicon glyphicon-remove"></i>
+        </span>
       </li>
     );
   }

@@ -1,28 +1,185 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
- * Import this file using the following HTML or equivalent:
- * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+@import "base";
 
- @import "base";
-body{
+/*
+  Common settings
+*/
+body {
+  background-color: $background-color;
+  color: $main-color;
   font: {
     family: $base-font;
+    size: $font-size-base;
   }
 }
-.title{
+input {
+  @include base-input;
+  background-color: $base-gray;
+}
+select{
+  @include base-input;
+  background-color: $base-gray;
+}
+
+/*
+  Header
+*/
+header {
+  color: $header-color;
   font: {
-    family: $title-font;
-    style: italic;
+    weight: 600;
+  }
+  margin: {
+    top: 15px;
+    bottom: 15px;
+  }
+  .title {
+    font: {
+      family: $title-font;
+      style: italic;
+      size: $font-size-title;
+    }
+    margin: {
+      bottom: 10px;
+    }
+    color: $main-color;
   }
 }
 
-.del-btn{
-  width: 18px;
+.bar {
+  @include base-component;
+  margin: {
+    bottom: 15px;
+  }
+  background: linear-gradient($lighter-gray, $base-gray);
   text-align: center;
+}
+
+
+/*
+  input-section (container of ItemForm and SearchBox)
+*/
+.input-section {
+  position: relative;
+  height: $list-height;
+  width: 33%;
+  float: left;
+  input:first-child {
+    margin-top: 0;
+  }
+  input:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/*
+  ItemForm component
+*/
+.item-form {
+  position: relative;
+  height: $list-height - $row-height * 2;
+  .submit-btn {
+    position: absolute;
+    bottom: 0;
+    background-color: inherit;
+    color: $main-color;
+    font-weight: 400;
+    &:hover{
+      background-color: $lighter-gray;
+      color: $background-color;
+      cursor: pointer;
+    }
+  }
+}
+
+/*
+  SearchBox component
+*/
+.search-box {
+  font-size: $font-size-small;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  input {
+    margin-bottom: 0;
+    height: $row-height-short;
+  }
+}
+.icon-search {
+  position: absolute;
+  top: $font-size-small + $row-height-short / 2;
+  right: 15px;
+  color: $main-color;
+  font-size: $font-size-base;
+}
+
+
+/*
+  display-section (container of ItemLists)
+*/
+.display-section {
+  width: 66%;
+  float: right;
+}
+
+/*
+  ItemList component
+*/
+.item-list {
+  width: 50%;
+  height: $list-height;
   border: {
-    radius: 5px;
+    width: $base-border-width;
     style: solid;
-    color: black;
-    width: 1px;
-  };
+    color: $main-color;
+    top-width: $base-border-width * 2;
+    bottom-width: $base-border-width * 2;
+  }
+  float: left;
+}
+.item-list:first-child {
+  border-left-width: $base-border-width * 2;
+}
+.item-list:last-child {
+  border-right-width: $base-border-width * 2;
+}
+// header of each columns
+.col-header {
+  @include base-component;
+  background: linear-gradient($lighter-gray, $darker-gray);
+  text-align: center;
+}
+
+/*
+  Items component
+*/
+.item {
+  @include base-component;
+  position: relative;
+  padding: {
+    left: 15px;
+  }
+  &.even {
+    background-color: $light-gray;
+    color: $background-color;
+    .del-btn {
+      color: $base-gray;
+      border-color: $base-gray;
+    }
+  }
+  &.odd {
+    background-color: $base-gray;
+    .del-btn {
+      color: $light-gray;
+      border-color: $light-gray;
+    }
+  }
+}
+// delete button
+.del-btn {
+  position: absolute;
+  right: 20px;
+  top: 16px;
+  width: $font-size-base * 2;
+  padding: 6px;
+  text-align: center;
 }
