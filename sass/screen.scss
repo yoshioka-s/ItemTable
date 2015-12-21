@@ -30,7 +30,10 @@ header {
   }
   margin: {
     top: 15px;
-    bottom: 15px;
+    bottom: 60px;
+  }
+  p {
+    line-height: 20px;
   }
   .title {
     font: {
@@ -135,6 +138,9 @@ header {
     bottom-width: $base-border-width * 2;
   }
   float: left;
+  &.overflowed {
+    overflow-y: scroll;
+  }
 }
 .item-list:first-child {
   border-left-width: $base-border-width * 2;
