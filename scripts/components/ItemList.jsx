@@ -14,8 +14,12 @@ var ItemList = React.createClass({
     var items = this.props.items.map(function (item, i) {
       return (<Item item={item} key={i} deleteItem={deleteItem} isEven={i % 2 === 0}/>);
     });
+    var className = 'item-list'
+    if (items.length > 7) {
+      className += ' overflowed';
+    }
     return (
-      <div className='item-list'>
+      <div className={className}>
         <h3 className='col-header'>COLUMN {this.props.index + 1}</h3>
         <ul>{items}</ul>
       </div>
