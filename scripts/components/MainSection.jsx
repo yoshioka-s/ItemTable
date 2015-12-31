@@ -3,11 +3,19 @@ var _ = require('underscore');
 var ItemForm = require('./ItemForm.jsx');
 var ItemList = require('./ItemList.jsx');
 var SearchBox = require('./SearchBox.jsx');
+var TaskStore = require('../stores/taskStore.js');
 
 const MAX_COLUMN = 2;
 
 var allItems = {};  // storage for created items
 var index = 0;      // storage index of a new item
+
+function getTaskState() {
+  return {
+    allTasks: TaskStore.getAll(),
+    displayTasks: TaskStore.getDisplay()
+  };
+}
 
 /*
  * The main component of the app.
@@ -16,21 +24,27 @@ var index = 0;      // storage index of a new item
 */
 var MainSection = React.createClass({
   getInitialState: function () {
-    return {
-      items: {},
-    };
+    return getTaskState();
+  },
+
+  componentDidMount: function() {
+    TaskStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    TaskStore.removeChangeListener(this._onChange);
   },
 
   render: function() {
     var itemLists = [];
     var deleteItem = this._deleteItem;
-    var displayItems = this.state.items;
+    var displayItems = this.state.displayTasks;
 
     // build MAX_COLUMN columns of ItemLists
     _.times(MAX_COLUMN, function (i) {
       // build ItemList for column i
       var propItems = _.filter(displayItems, function (item, key) {
-        return Number(item.column) === i;
+        return Number(item.project) === i;
       });
       itemLists.push(
         <ItemList
@@ -48,7 +62,7 @@ var MainSection = React.createClass({
         <div className='input-section'>
           <ItemForm
             onSubmit={this._saveItem}
-            maxColumn={MAX_COLUMN}
+            maxProject={MAX_COLUMN}
           />
           <SearchBox
             updateFilter={this._updateFilter}/>
@@ -61,48 +75,13 @@ var MainSection = React.createClass({
   },
 
   /*
-   * add a new item to both allItems and state.items
+   * onChange event of this component
+   * set all tasks of the store to this.state to update the view
    * @param {object} new item
   */
-  _saveItem: function (item) {
-    item.index = index;
-    // update allItems
-    allItems[index] = item;
-    // add the new item on displaying items
-    var displayItems = this.state.items;
-    displayItems[index] = item;
-    index++;
-    // update the state
-    this.setState({items: displayItems});
+  _onChange: function() {
+    this.setState(getTaskState());
   },
-
-  /*
-   * delete an item from both allItems and state.items
-   * @param {object} item
-  */
-  _deleteItem: function (item) {
-    delete allItems[item.index];
-    var displayItems = this.state.items;
-    delete displayItems[item.index];
-    this.setState({items: displayItems});
-  },
-
-  /*
-   * filter allItems and set state.items to the result
-   * @param {string} string
-  */
-  _updateFilter: function (string) {
-    var displayItems = _.chain(allItems)
-      .filter(function (item) {
-        return item.name.toLowerCase().indexOf(string.toLowerCase()) > -1;
-      })
-      .reduce(function (memo, item) {  // convert the array to an object
-        memo[item.index] = item;
-        return memo;
-      }, {})
-      .value();
-    this.setState({items: displayItems});
-  }
 });
 
 module.exports = MainSection;

@@ -1,12 +1,13 @@
 var React = require('react');
 var _ = require('underscore');
+var TaskActions = require('../actions/TaskActions.js');
 
 /*
  * validation for a new item
  * @params {object} item
 */
 function isValid (item) {
-  return item.name.trim().length > 0 && item.column > -1;
+  return item.name.trim().length > 0;
 }
 
 /*
@@ -15,14 +16,13 @@ function isValid (item) {
  */
 var ItemForm = React.createClass({
   propTypes: {
-    maxColumn: React.PropTypes.number.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    maxProject: React.PropTypes.number.isRequired
   },
 
   getInitialState: function () {
     return {
       name: '',
-      column: 'CHOOSE COLUMN'
+      project: 'CHOOSE PROJECT'
     };
   },
 
@@ -34,42 +34,39 @@ var ItemForm = React.createClass({
     this.setState({name: e.target.value});
   },
 
-  handleColumnChange: function (column) {
-    this.setState({column: column});
+  handleProjectChange: function (project) {
+    this.setState({project: project});
   },
 
   handleSubmit: function (e) {
     e.preventDefault();
     if (!isValid(this.state)) {
       // set focus on un-filled input
-      if (this.state.column.length < 1) {
-        this.columnInput.focus();
-      } else {
-        this.nameInput.focus();
-      }
+      this.nameInput.focus();
       return;
     }
 
-    this.props.onSubmit(this.state);
-    // reset only name
+    TaskActions.create(this.state);
+    // reset name
     this.setState({name: ''});
     this.nameInput.focus();
   },
 
   render: function() {
-    var columnOptions = [];
-    var handleColumnChange = this.handleColumnChange;
-    _.times(this.props.maxColumn, function (i) {
-      columnOptions.push(
+    var projectOptions = [];
+    var handleProjectChange = this.handleProjectChange;
+    _.times(this.props.maxProject, function (i) {
+      projectOptions.push(
         <li key={i}>
           <a href="#"
             value={i}
-            onClick={() => {handleColumnChange(i)}}>
+            onClick={() => {handleProjectChange(i)}}>
             {i + 1}
           </a>
         </li>
       );
     });
+
     var classNames = 'submit-btn';
     classNames += isValid(this.state) ? ' valid' : ' invalid';
 
@@ -83,23 +80,22 @@ var ItemForm = React.createClass({
           value={this.state.name}
           onChange={this.handleNameChange}
         />
-        <div className="btn-group column-input">
+        <div className="btn-group project-input">
           <button className="dropdown-toggle"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            ref={ (ref) => this.columnInput = ref }>
-            {isNaN(this.state.column) ? this.state.column : this.state.column + 1}
+            ref={ (ref) => this.projectInput = ref }>
+            {isNaN(this.state.project) ? this.state.project : this.state.project + 1}
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">
-            {columnOptions}
+            {projectOptions}
           </ul>
         </div>
         <input className={classNames}
           type="submit"
           value="ADD ITEM"
-          // disabled={String(!isValid(this.state))}
           onClick={this.handleSubmit}
         />
     </form>

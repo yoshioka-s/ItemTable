@@ -76,7 +76,7 @@ header {
 .item-form {
   position: relative;
   height: $list-height - $row-height * 2;
-  .column-input {
+  .project-input {
     width: 100%;
     button {
       text-align: left;
@@ -166,7 +166,7 @@ header {
 .item-list:last-child {
   border-right-width: $base-border-width * 2;
 }
-// header of each columns
+// header of each projects
 .col-header {
   @include base-component;
   background: linear-gradient($lighter-gray, $darker-gray);
