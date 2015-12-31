@@ -1,11 +1,10 @@
 var React = require('react');
+var TaskActions = require('../actions/TaskActions.js');
 
 var Item = React.createClass({
-  propTypes: {
-    updateFilter: React.PropTypes.func.isRequired
-  },
 
   handleSearch: function (e) {
+    TaskActions.filter(e.target.value);
     this.props.updateFilter(e.target.value);
   },
 
