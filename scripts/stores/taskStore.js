@@ -19,7 +19,10 @@ function create(task) {
     id: id,
     complete: false,
     name: task.name,
-    project: task.project
+    project: task.project,
+    time: 0,
+    isRunning: false,
+    startDate: null
   };
   _tasks[id] = newTask;
   _displayTasks[id] = newTask;
@@ -50,6 +53,26 @@ function filterByName(word) {
     return memo;
   }, {})
   .value();
+}
+
+/**
+ * Start running a task.
+ * @param {number} id
+ */
+function run(id) {
+  var task = _tasks[id];
+  task.isRunning = true;
+  task.startDate = new Date();
+}
+
+/**
+ * Stop running a task.
+ * @param {number} id
+ */
+function stop(id) {
+  var task = _tasks[id];
+  task.isRunning = false;
+  task.time += new Date() - task.startDate;
 }
 
 var TaskStore = assign({}, EventEmitter.prototype, {
@@ -109,6 +132,15 @@ var TaskStore = assign({}, EventEmitter.prototype, {
         TaskStore.emitChange();
         break;
 
+      case TaskConstants.RUN:
+        run(action.id);
+        TaskStore.emitChange();
+        break;
+
+      case TaskConstants.STOP:
+        stop(action.id);
+        TaskStore.emitChange();
+        break;
     }
 
     return true; // No errors. Needed by promise in Dispatcher.

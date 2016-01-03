@@ -197,6 +197,13 @@ header {
       border-color: $light-gray;
     }
   }
+  &.running {
+    background-color: $header-color;
+    .del-btn {
+      color: $main-color;
+      border-color: $main-color;
+    }
+  }
 }
 // delete button
 .del-btn {
@@ -206,4 +213,11 @@ header {
   width: $font-size-base * 2;
   padding: 6px;
   text-align: center;
+}
+// run btn
+.run-btn {
+  border {
+    color: $main-color;
+    width: 1px;
+  }
 }

@@ -37,6 +37,26 @@ var TodoActions = {
     });
   },
 
+  /**
+   * @param  {number} id of the item
+   */
+  run: function(id) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.RUN,
+      id: id
+    });
+  },
+
+  /**
+   * @param  {number} id of the item
+   */
+  stop: function(id) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.STOP,
+      id: id
+    });
+  }
+
 };
 
 module.exports = TodoActions;
