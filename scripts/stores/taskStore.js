@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
-var EventEmitter = require('events').EventEmitter;
 var TaskConstants = require('../constants/TaskConstants');
+// var ProjectStore = require('../stores/ProjectStore');
+var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
 

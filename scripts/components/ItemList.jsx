@@ -5,13 +5,14 @@ var Item = require('./Item.jsx');
 var ItemList = React.createClass({
   propTypes: {
     items: React.PropTypes.array,
-    index: React.PropTypes.number.isRequired
+    index: React.PropTypes.number.isRequired,
+    name: React.PropTypes.string.isRequired
   },
 
   render: function() {
     var deleteItem = this.props.deleteItem;
     var items = this.props.items.map(function (item, i) {
-      return (<Item item={item} key={i} deleteItem={deleteItem} isEven={i % 2 === 0} id={item.id}/>);
+      return (<Item item={item} key={i} isEven={i % 2 === 0} id={item.id}/>);
     });
     var className = 'item-list'
     if (items.length > 7) {
@@ -19,7 +20,7 @@ var ItemList = React.createClass({
     }
     return (
       <div className={className}>
-        <h3 className='col-header'>PROJECT {this.props.index + 1}</h3>
+        <h3 className='col-header'>{this.props.name}</h3>
         <ul>{items}</ul>
       </div>
     );

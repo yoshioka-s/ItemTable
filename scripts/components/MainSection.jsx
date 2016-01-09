@@ -1,11 +1,11 @@
 var React = require('react');
 var _ = require('underscore');
 var ItemForm = require('./ItemForm.jsx');
+var ProjectForm = require('./ProjectForm.jsx');
 var ItemList = require('./ItemList.jsx');
 var SearchBox = require('./SearchBox.jsx');
-var TaskStore = require('../stores/taskStore.js');
-
-const MAX_COLUMN = 2;
+var TaskStore = require('../stores/taskStore');
+var ProjectStore = require('../stores/ProjectStore');
 
 var allItems = {};  // storage for created items
 var index = 0;      // storage index of a new item
@@ -29,29 +29,31 @@ var MainSection = React.createClass({
 
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange);
+    ProjectStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
     TaskStore.removeChangeListener(this._onChange);
+    ProjectStore.removeChangeListener(this._onChange);
   },
 
   render: function() {
     var itemLists = [];
-    var deleteItem = this._deleteItem;
     var displayItems = this.state.displayTasks;
 
     // build MAX_COLUMN columns of ItemLists
-    _.times(MAX_COLUMN, function (i) {
+    _.each(ProjectStore.getAll(), function (project) {
+      console.log(project);
       // build ItemList for column i
       var propItems = _.filter(displayItems, function (item, key) {
-        return Number(item.project) === i;
+        return Number(item.project.id) === project.id;
       });
       itemLists.push(
         <ItemList
-          key={i}
-          index={i}
+          key={project.id}
+          name={project.name}
+          index={project.id}
           items={propItems}
-          deleteItem={deleteItem}
         />
       );
     });
@@ -61,14 +63,16 @@ var MainSection = React.createClass({
         <div className='bar'>ADD AN ITEM</div>
         <div className='input-section'>
           <ItemForm
-            onSubmit={this._saveItem}
-            maxProject={MAX_COLUMN}
+            projects={ProjectStore.getAll()}
           />
           <SearchBox
             updateFilter={this._updateFilter}/>
         </div>
         <div className='display-section'>
           {itemLists}
+        </div>
+        <div className='project-section'>
+          <ProjectForm/>
         </div>
       </div>
     );

@@ -1,13 +1,13 @@
 var React = require('react');
 var _ = require('underscore');
-var TaskActions = require('../actions/TaskActions.js');
+var ProjectActions = require('../actions/ProjectActions');
 
 /*
  * validation for a new item
- * @params {object} item
+ * @params {object} project
 */
-function isValid (item) {
-  return item.name.trim().length > 0;
+function isValid (project) {
+  return project.name.trim().length > 0;
 }
 
 /*
@@ -15,27 +15,15 @@ function isValid (item) {
  *
  */
 var ItemForm = React.createClass({
-  propTypes: {
-    projects: React.PropTypes.array.isRequired
-  },
 
   getInitialState: function () {
     return {
-      name: '',
-      project: {id: -1}
+      name: ''
     };
-  },
-
-  componentDidMount: function () {
-    this.nameInput.focus();
   },
 
   handleNameChange: function (e) {
     this.setState({name: e.target.value});
-  },
-
-  handleProjectChange: function (project) {
-    this.setState({project: project});
   },
 
   handleSubmit: function (e) {
@@ -46,14 +34,12 @@ var ItemForm = React.createClass({
       return;
     }
 
-    TaskActions.create(this.state);
+    ProjectActions.create(this.state.name);
     // reset name
     this.setState({name: ''});
-    this.nameInput.focus();
   },
 
   render: function() {
-    var projectOptions = [];
     var handleProjectChange = this.handleProjectChange;
     _.each(this.props.projects, function (project) {
       projectOptions.push(
@@ -71,31 +57,18 @@ var ItemForm = React.createClass({
     classNames += isValid(this.state) ? ' valid' : ' invalid';
 
     return (
-      <form className="item-form"
+      <form className="project-form"
         onSubmit={this.handleSubmit}>
         <input className="name-input"
           name="name"
           ref={ (ref) => this.nameInput = ref }
-          placeholder="ENTER ITEM"
+          placeholder="ENTER PROJECT NAME"
           value={this.state.name}
           onChange={this.handleNameChange}
         />
-        <div className="btn-group project-input">
-          <button className="dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            ref={ (ref) => this.projectInput = ref }>
-            {this.state.project.id < 0 ? "CHOOSE PROJECT" : this.state.project.name}
-            <span className="caret"></span>
-          </button>
-          <ul className="dropdown-menu">
-            {projectOptions}
-          </ul>
-        </div>
         <input className={classNames}
           type="submit"
-          value="ADD ITEM"
+          value="ADD PROJECT"
           onClick={this.handleSubmit}
         />
     </form>
