@@ -1,6 +1,5 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var TaskConstants = require('../constants/TaskConstants');
-// var ProjectStore = require('../stores/ProjectStore');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var _ = require('underscore');
@@ -9,6 +8,7 @@ const CHANGE_EVENT = 'change';
 
 var _tasks = {}; // collection of all tasks
 var _displayTasks = {}; // collection of tasks to show
+var _newTask = {name: '', project: null};
 var id = 0;
 
 /**
@@ -76,6 +76,14 @@ function stop(id) {
   task.time += new Date() - task.startDate;
 }
 
+/**
+ * Set project id to a new task.
+ * @param {number} projectId
+ */
+function prepare(projectId) {
+  _newTask.project = projectId;
+}
+
 var TaskStore = assign({}, EventEmitter.prototype, {
 
   /**
@@ -93,6 +101,14 @@ var TaskStore = assign({}, EventEmitter.prototype, {
   getDisplay: function() {
     return _displayTasks;
   },
+
+  /**
+   * Get the new task to create.
+   * @return {object}
+   */
+   getNewTask: function () {
+     return _newTask;
+   },
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -140,6 +156,10 @@ var TaskStore = assign({}, EventEmitter.prototype, {
 
       case TaskConstants.STOP:
         stop(action.id);
+        TaskStore.emitChange();
+        break;
+      case TaskConstants.NEW:
+        prepare(action.projectId);
         TaskStore.emitChange();
         break;
     }

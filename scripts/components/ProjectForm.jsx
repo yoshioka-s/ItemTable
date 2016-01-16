@@ -14,7 +14,7 @@ function isValid (project) {
  * input component for new item name
  *
  */
-var ItemForm = React.createClass({
+var ProjectForm = React.createClass({
 
   getInitialState: function () {
     return {
@@ -57,22 +57,44 @@ var ItemForm = React.createClass({
     classNames += isValid(this.state) ? ' valid' : ' invalid';
 
     return (
-      <form className="project-form"
-        onSubmit={this.handleSubmit}>
-        <input className="name-input"
-          name="name"
-          ref={ (ref) => this.nameInput = ref }
-          placeholder="ENTER PROJECT NAME"
-          value={this.state.name}
-          onChange={this.handleNameChange}
-        />
-        <input className={classNames}
-          type="submit"
-          value="ADD PROJECT"
-          onClick={this.handleSubmit}
-        />
-    </form>
+      <div className='project-section col-sm-2'>
+        <button className="btn btn-info"
+          data-toggle="modal"
+          data-target="#project-form">
+          +
+        </button>
+        <div className="modal fade modal-dialog"
+          role="dialog"
+          id="project-form">
+          <div className="modal-content">
+            <div class="modal-header">
+              <button className="btn btn-sm close-btn"
+                data-dismiss="modal">
+                x
+              </button>
+              <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <form className="modal-body"
+              onSubmit={this.handleSubmit}>
+              <input className="name-input"
+                name="name"
+                ref={ (ref) => this.nameInput = ref }
+                placeholder="ENTER PROJECT NAME"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+              />
+              <input className={classNames}
+                data-dismiss="modal"
+                type="submit"
+                value="ADD PROJECT"
+                onClick={this.handleSubmit}
+              />
+            </form>
+          </div>
+
+        </div>
+      </div>
     );
   }
 });
-module.exports = ItemForm;
+module.exports = ProjectForm;

@@ -5,7 +5,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var TaskConstants = require('../constants/TaskConstants.js');
 
-var TodoActions = {
+var TaskActions = {
 
   /**
    * @param  {object} task
@@ -55,8 +55,18 @@ var TodoActions = {
       actionType: TaskConstants.STOP,
       id: id
     });
+  },
+
+  /**
+   * @param  {number} projectId of the new task
+   */
+  prepareNewTask: function(projectId) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.PREPARE,
+      projectId: projectId
+    });
   }
 
 };
 
-module.exports = TodoActions;
+module.exports = TaskActions;

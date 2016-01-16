@@ -57,11 +57,11 @@ header {
 /*
   input-section (container of ItemForm and SearchBox)
 */
-.input-section {
-  position: relative;
+.item-form {
+  position: absolute;
   height: $list-height;
   width: 33%;
-  float: left;
+  // float: left;
   input:first-child {
     margin-top: 0;
   }
@@ -117,8 +117,7 @@ header {
 */
 .search-box {
   font-size: $font-size-small;
-  position: absolute;
-  bottom: 0;
+  position: relative;
   width: 100%;
   input {
     margin-bottom: 0;
@@ -139,14 +138,14 @@ header {
 */
 .display-section {
   width: 66%;
-  float: right;
+  // float: right;
 }
 
 /*
   ItemList component
 */
 .item-list {
-  width: 50%;
+  width: 100%;
   height: $list-height;
   border: {
     width: $base-border-width;
@@ -155,7 +154,7 @@ header {
     top-width: $base-border-width * 2;
     bottom-width: $base-border-width * 2;
   }
-  float: left;
+  float: right;
   &.overflowed {
     overflow-y: scroll;
   }
@@ -220,4 +219,22 @@ header {
     color: $main-color;
     width: 1px;
   }
+}
+
+/*
+ * Project form
+*/
+
+.close-btn {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  right: 10px;
+}
+.modal {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  width: $modal-width;
+  margin-left: -($modal-width / 2);
 }

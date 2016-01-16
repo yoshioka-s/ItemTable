@@ -2,9 +2,9 @@ var React = require('react');
 var _ = require('underscore');
 var ItemForm = require('./ItemForm.jsx');
 var ProjectForm = require('./ProjectForm.jsx');
-var ItemList = require('./ItemList.jsx');
+var Project = require('./Project.jsx');
 var SearchBox = require('./SearchBox.jsx');
-var TaskStore = require('../stores/taskStore');
+var TaskStore = require('../stores/TaskStore');
 var ProjectStore = require('../stores/ProjectStore');
 
 var allItems = {};  // storage for created items
@@ -38,40 +38,46 @@ var MainSection = React.createClass({
   },
 
   render: function() {
-    var itemLists = [];
+    // var itemLists = [];
+    var projects = [];
     var displayItems = this.state.displayTasks;
 
-    // build MAX_COLUMN columns of ItemLists
+    // build Project elements
     _.each(ProjectStore.getAll(), function (project) {
       console.log(project);
-      // build ItemList for column i
       var propItems = _.filter(displayItems, function (item, key) {
         return Number(item.project.id) === project.id;
       });
-      itemLists.push(
-        <ItemList
-          key={project.id}
-          name={project.name}
-          index={project.id}
-          items={propItems}
-        />
+      projects.push(
+        <div className='col-sm-6' >
+          <Project
+            key={project.id}
+            name={project.name}
+            index={project.id}
+            items={propItems}
+          />
+        </div>
       );
     });
 
     return (
       <div>
         <div className='bar'>ADD AN ITEM</div>
-        <div className='input-section'>
-          <ItemForm
-            projects={ProjectStore.getAll()}
-          />
-          <SearchBox
-            updateFilter={this._updateFilter}/>
-        </div>
+
+        <SearchBox
+          updateFilter={this._updateFilter}
+        />
+
+        <ItemForm
+          projects={ProjectStore.getAll()}
+          newTask={TaskStore.getNewTask()}
+        />
+
+
         <div className='display-section'>
-          {itemLists}
+          {projects}
         </div>
-        <div className='project-section'>
+        <div >
           <ProjectForm/>
         </div>
       </div>
