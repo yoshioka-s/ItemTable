@@ -1,3 +1,4 @@
+var Promise = require('es6-promise').Promise;
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var ProjectConstants = require('../constants/ProjectConstants');
 var EventEmitter = require('events').EventEmitter;
@@ -5,9 +6,11 @@ var assign = require('object-assign');
 var _ = require('underscore');
 
 const CHANGE_EVENT = 'change';
+const PROJECTS_STORAGE = 'projects';
+const MAX_PROJECT_ID = 'maxProjectId';
 
-var _projects = {99: {name: 'dummy', id: 99}}; // collection of all tasks
-var id = 0;
+var _projects = {99: {name: 'dummit', id: 99}}; // collection of all tasks
+var id = -1;
 
 /**
  * Create a project.
@@ -22,8 +25,19 @@ function create(name) {
     isRunning: false,
     startDate: null
   };
-  _projects[id] = newProject;
-  id++;
+  // sync with the projects storage before updating
+  ProjectStore.loadProjects()
+  .then(function () {
+    id++;
+    _projects[id] = newProject;
+    ProjectStore.emitChange();
+    // update the storage
+    var updateData = {};
+    updateData[PROJECTS_STORAGE] = _projects;
+    updateData[MAX_PROJECT_ID] = id;
+    chrome.storage.sync.set(updateData, function () {
+    });
+  });
 }
 
 /**
@@ -41,7 +55,25 @@ var ProjectStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll: function() {
-    return _projects;
+    return _.filter(_projects, function (p, id) {
+      return !isNaN(id);
+    });
+  },
+
+  /**
+   * Load the projects from chrome storage.
+   * @return {promise}
+   */
+  loadProjects: function () {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get([PROJECTS_STORAGE, MAX_PROJECT_ID], function (items) {
+        _projects = items[PROJECTS_STORAGE];
+        if (!isNaN(items[MAX_PROJECT_ID])) {
+          id = Math.max(id, items[MAX_PROJECT_ID]);
+        }
+        resolve(items);
+      });
+    });
   },
 
   emitChange: function() {

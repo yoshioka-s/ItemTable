@@ -20,6 +20,8 @@ var Project = React.createClass({
     // add a new new item button as a last item
     items.push(<button
                   className="btn btn-sm btn-default"
+                  value="New Task +"
+                  key="newTask"
                   data-toggle="modal"
                   data-target="#newtaskform"
                   onClick={showTaskForm(this.props.index)}/>);

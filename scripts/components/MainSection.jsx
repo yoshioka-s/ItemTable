@@ -7,13 +7,11 @@ var SearchBox = require('./SearchBox.jsx');
 var TaskStore = require('../stores/TaskStore');
 var ProjectStore = require('../stores/ProjectStore');
 
-var allItems = {};  // storage for created items
-var index = 0;      // storage index of a new item
-
 function getTaskState() {
   return {
     allTasks: TaskStore.getAll(),
-    displayTasks: TaskStore.getDisplay()
+    displayTasks: TaskStore.getDisplay(),
+    allProjects: ProjectStore.getAll()
   };
 }
 
@@ -27,6 +25,27 @@ var MainSection = React.createClass({
     return getTaskState();
   },
 
+  componentWillMount: function () {
+    var loaded = false;
+    var compoent = this;
+    // setState if projects and tasks are both loaded
+    function updateState() {
+      if (loaded) {
+        compoent.setState(getTaskState());
+      }
+      loaded = true;
+    }
+
+    TaskStore.loadTasks()
+    .then(function () {
+      updateState();
+    });
+    ProjectStore.loadProjects()
+    .then(function () {
+      updateState();
+    });
+  },
+
   componentDidMount: function() {
     TaskStore.addChangeListener(this._onChange);
     ProjectStore.addChangeListener(this._onChange);
@@ -38,21 +57,21 @@ var MainSection = React.createClass({
   },
 
   render: function() {
-    // var itemLists = [];
     var projects = [];
-    var displayItems = this.state.displayTasks;
+    var displayTasks = this.state.displayTasks;
 
     // build Project elements
-    _.each(ProjectStore.getAll(), function (project) {
-      var propItems = _.filter(displayItems, function (item, key) {
+    _.each(ProjectStore.getAll(), function (project, projectId) {
+      console.log(projectId, project);
+      var propItems = _.filter(displayTasks, function (item, key) {
         return Number(item.project.id) === project.id;
       });
       projects.push(
-        <div className='col-sm-6' >
+        <div className='col-sm-2'
+             key={projectId} >
           <Project
-            key={project.id}
             name={project.name}
-            index={project.id}
+            index={projectId}
             items={propItems}
           />
         </div>

@@ -136,15 +136,13 @@ header {
   display-section (container of ItemLists)
 */
 .display-section {
-  width: 66%;
-  // float: right;
+  width: 100%;
 }
 
 /*
   ItemList component
 */
 .item-list {
-  width: 100%;
   height: $list-height;
   border: {
     width: $base-border-width;

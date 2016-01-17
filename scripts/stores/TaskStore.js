@@ -5,6 +5,8 @@ var assign = require('object-assign');
 var _ = require('underscore');
 
 const CHANGE_EVENT = 'change';
+const TASKS_STORAGE = 'tasks';
+const MAX_TASK_ID = 'maxTaskId';
 
 var _tasks = {}; // collection of all tasks
 var _displayTasks = {}; // collection of tasks to show
@@ -12,7 +14,7 @@ var _newTask = {name: '', project: null};
 var id = 0;
 
 /**
- * Create a task item.
+ * Create a task.
  * @param {object} task
  */
 function create(task) {
@@ -25,14 +27,26 @@ function create(task) {
     isRunning: false,
     startDate: null
   };
-  _tasks[id] = newTask;
-  _displayTasks[id] = newTask;
-  console.log(_tasks[id]);
-  id++;
+
+  // sync with the tasks storage before update
+  TaskStore.loadTasks()
+  .then(function () {
+    id++;
+    _tasks[id] = newTask;
+    TaskStore.emitChange();
+    // save in chrome data store
+    var updateData = {maxId: id};
+    updateData[TASKS_STORAGE] = _tasks;
+    updateData[MAX_TASK_ID] = id;
+    chrome.storage.sync.set(updateData, function () {
+      console.log('saved: ', _tasks);
+    });
+  });
+  _displayTasks[id+1] = newTask;
 }
 
 /**
- * Delete a TODO item.
+ * Delete a task.
  * @param {string} id
  */
 function destroy(id) {
@@ -100,6 +114,23 @@ var TaskStore = assign({}, EventEmitter.prototype, {
    */
   getDisplay: function() {
     return _displayTasks;
+  },
+
+  /**
+   * Load the tasks from chrome storage.
+   * @return {promise}
+   */
+  loadTasks: function () {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.sync.get([TASKS_STORAGE, MAX_TASK_ID], function (items) {
+        console.log('retrieved tasks: ', items);
+        _tasks = items[TASKS_STORAGE];
+        if (!isNaN(items[MAX_TASK_ID])) {
+          id = Math.max(id, items[MAX_TASK_ID]);
+        }
+        resolve(items);
+      });
+    });
   },
 
   /**

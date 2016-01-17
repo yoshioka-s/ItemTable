@@ -56,9 +56,9 @@ var ItemForm = React.createClass({
   render: function() {
     var projectOptions = [];
     var handleProjectChange = this.handleProjectChange;
-    _.each(this.props.projects, function (project) {
+    _.each(this.props.projects, function (project, projectId) {
       projectOptions.push(
-        <li key={project.id}>
+        <li key={projectId}>
           <a href="#"
             value={project.id}
             onClick={() => {handleProjectChange(project)}}>
@@ -75,38 +75,43 @@ var ItemForm = React.createClass({
       <div className="modal fade modal-dialog"
         id="newtaskform"
         role="dialog">
+        <div className="modal-content">
 
-        <form className="item-form"
-          onSubmit={this.handleSubmit}>
-          <input className="name-input modal-content"
-            name="name"
-            type="text"
-            ref={ (ref) => this.nameInput = ref }
-            placeholder="ENTER ITEM"
-            value={this.state.name}
-            onChange={this.handleNameChange}
-          />
-          <div className="btn-group project-input">
-            <button className="dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-              ref={ (ref) => this.projectInput = ref }>
-              {this.state.project.id < 0 ? "CHOOSE PROJECT" : this.state.project.name}
-              <span className="caret"></span>
-            </button>
-            <ul className="dropdown-menu">
-              {projectOptions}
-            </ul>
-          </div>
-          <input className={classNames}
-            type="submit"
-            value="ADD ITEM"
-            onClick={this.handleSubmit}
-            data-dismiss="modal"
-          />
-      </form>
-    </div>
+          <form className="item-form"
+            onSubmit={this.handleSubmit}>
+            <input className="name-input"
+              name="name"
+              type="text"
+              ref={ (ref) => this.nameInput = ref }
+              placeholder="ENTER ITEM"
+              value={this.state.name}
+              onChange={this.handleNameChange}
+            />
+
+            <div className="btn-group project-input">
+              <button className="dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                ref={ (ref) => this.projectInput = ref }>
+                {this.state.project.id < 0 ? "CHOOSE PROJECT" : this.state.project.name}
+                <span className="caret"></span>
+              </button>
+              <ul className="dropdown-menu">
+                {projectOptions}
+              </ul>
+            </div>
+
+            <input className={classNames}
+              type="submit"
+              value="ADD ITEM"
+              onClick={this.handleSubmit}
+              data-dismiss="modal"
+            />
+          </form>
+        </div>
+
+      </div>
     );
   }
 });

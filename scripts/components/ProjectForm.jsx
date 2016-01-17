@@ -67,12 +67,12 @@ var ProjectForm = React.createClass({
           role="dialog"
           id="project-form">
           <div className="modal-content">
-            <div class="modal-header">
+            <div className="modal-header">
               <button className="btn btn-sm close-btn"
                 data-dismiss="modal">
                 x
               </button>
-              <h4 class="modal-title">Modal Header</h4>
+              <h4 className="modal-title">New Project</h4>
             </div>
             <form className="modal-body"
               onSubmit={this.handleSubmit}>
