@@ -23,7 +23,6 @@ function create(name) {
     startDate: null
   };
   _projects[id] = newProject;
-  console.log(_projects[id]);
   id++;
 }
 

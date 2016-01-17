@@ -75,7 +75,9 @@ header {
 */
 .item-form {
   position: relative;
-  height: $list-height - $row-height * 2;
+  .name-input {
+    color: $darker-gray;
+  }
   .project-input {
     width: 100%;
     button {
@@ -91,9 +93,6 @@ header {
     right: 8px;
   }
   .submit-btn {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     font-weight: 400;
     &.valid {
       background-color: inherit;

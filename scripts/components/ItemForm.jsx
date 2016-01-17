@@ -54,7 +54,6 @@ var ItemForm = React.createClass({
   },
 
   render: function() {
-    console.log(this.state);
     var projectOptions = [];
     var handleProjectChange = this.handleProjectChange;
     _.each(this.props.projects, function (project) {
