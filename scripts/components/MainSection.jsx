@@ -44,7 +44,6 @@ var MainSection = React.createClass({
 
     // build Project elements
     _.each(ProjectStore.getAll(), function (project) {
-      console.log(project);
       var propItems = _.filter(displayItems, function (item, key) {
         return Number(item.project.id) === project.id;
       });
@@ -62,7 +61,6 @@ var MainSection = React.createClass({
 
     return (
       <div>
-        <div className='bar'>ADD AN ITEM</div>
 
         <SearchBox
           updateFilter={this._updateFilter}
