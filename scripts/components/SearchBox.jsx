@@ -1,7 +1,7 @@
 var React = require('react');
 var TaskActions = require('../actions/TaskActions.js');
 
-var Item = React.createClass({
+var Task = React.createClass({
 
   handleSearch: function (e) {
     TaskActions.filter(e.target.value);
@@ -21,4 +21,4 @@ var Item = React.createClass({
     );
   }
 });
-module.exports = Item;
+module.exports = Task;

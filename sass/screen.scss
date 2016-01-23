@@ -60,8 +60,7 @@ header {
 .item-form {
   position: absolute;
   height: $list-height;
-  width: 33%;
-  // float: left;
+  width: 100%;
   input:first-child {
     margin-top: 0;
   }
@@ -95,16 +94,16 @@ header {
   .submit-btn {
     font-weight: 400;
     &.valid {
-      background-color: inherit;
+      background-color: $base-gray;
       color: $main-color;
       &:hover{
-        background-color: $lighter-gray;
+        background-color: $darker-gray;
         color: $background-color;
         cursor: pointer;
       }
     }
     &.invalid {
-      background-color: inherit;
+      background-color: $light-gray;
       color: $main-color;
       cursor: not-allowed;
     }
@@ -231,7 +230,13 @@ header {
 .modal {
   position: fixed;
   top: 10%;
-  left: 50%;
-  width: $modal-width;
-  margin-left: -($modal-width / 2);
+  width: 90%;
+  margin: auto;
 }
+// .tab-content .tab-pane {
+//   display: none;
+// }
+//
+// .tab-content .tab-pane.active {
+//   display: block;
+// }

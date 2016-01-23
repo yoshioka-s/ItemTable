@@ -3,7 +3,7 @@ var _ = require('underscore');
 var ProjectActions = require('../actions/ProjectActions');
 
 /*
- * validation for a new item
+ * validation for a new project
  * @params {object} project
 */
 function isValid (project) {
@@ -57,43 +57,22 @@ var ProjectForm = React.createClass({
     classNames += isValid(this.state) ? ' valid' : ' invalid';
 
     return (
-      <div className='project-section col-sm-2'>
-        <button className="btn btn-info"
-          data-toggle="modal"
-          data-target="#project-form">
-          +
-        </button>
-        <div className="modal fade modal-dialog"
-          role="dialog"
-          id="project-form">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button className="btn btn-sm close-btn"
-                data-dismiss="modal">
-                x
-              </button>
-              <h4 className="modal-title">New Project</h4>
-            </div>
-            <form className="modal-body"
-              onSubmit={this.handleSubmit}>
-              <input className="name-input"
-                name="name"
-                ref={ (ref) => this.nameInput = ref }
-                placeholder="ENTER PROJECT NAME"
-                value={this.state.name}
-                onChange={this.handleNameChange}
-              />
-              <input className={classNames}
-                data-dismiss="modal"
-                type="submit"
-                value="ADD PROJECT"
-                onClick={this.handleSubmit}
-              />
-            </form>
-          </div>
-
-        </div>
-      </div>
+      <form className="project-form"
+        onSubmit={this.handleSubmit}>
+        <input className="name-input"
+          name="name"
+          ref={ (ref) => this.nameInput = ref }
+          placeholder="ENTER PROJECT NAME"
+          value={this.state.name}
+          onChange={this.handleNameChange}
+        />
+        <input className={classNames}
+          data-dismiss="modal"
+          type="submit"
+          value="ADD PROJECT"
+          onClick={this.handleSubmit}
+        />
+      </form>
     );
   }
 });
