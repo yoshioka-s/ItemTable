@@ -17,8 +17,6 @@ function getTaskState() {
 
 /*
  * The main component of the app.
- * keep track of all items created by the user.
- * @param {string} string
 */
 var MainSection = React.createClass({
   getInitialState: function () {
@@ -65,20 +63,20 @@ var MainSection = React.createClass({
   render: function() {
     var allProjects = ProjectStore.getAll();
     var projects = [];
-    var displayTasks = this.state.displayTasks;
+    // var displayTasks = this.state.displayTasks;
+    var displayTasks = this.state.allTasks;
 
     // build Project elements
     _.each(allProjects, function (project, projectId) {
-      console.log(projectId, project);
-      var propItems = _.filter(displayTasks, function (item, key) {
-        return Number(item.project.id) === project.id;
+      var propTasks = _.filter(displayTasks, function (task, key) {
+        return Number(task.projectId) === Number(projectId);
       });
       projects.push(
         <Project className='col-sm-6'
           key={projectId}
           name={project.name}
           index={projectId}
-          items={propItems}
+          tasks={propTasks}
         />
       );
     });
@@ -134,7 +132,6 @@ var MainSection = React.createClass({
   /*
    * onChange event of this component
    * set all tasks of the store to this.state to update the view
-   * @param {object} new item
   */
   _onChange: function() {
     this.setState(getTaskState());

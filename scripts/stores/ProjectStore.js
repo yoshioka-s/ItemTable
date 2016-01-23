@@ -9,7 +9,7 @@ const CHANGE_EVENT = 'change';
 const PROJECTS_STORAGE = 'projects';
 const MAX_PROJECT_ID = 'maxProjectId';
 
-var _projects = {99: {name: 'dummit', id: 99}}; // collection of all tasks
+var _projects = {'-1': {name: 'other', id: -1}}; // collection of all tasks
 var id = -1;
 
 /**
@@ -17,7 +17,6 @@ var id = -1;
  * @param {string} name
  */
 function create(name) {
-  console.log(name);
   var newProject = {
     id: id,
     complete: false,
@@ -31,20 +30,21 @@ function create(name) {
   .then(function () {
     id++;
     _projects[id] = newProject;
+    newProject.id = id;
     console.log('created');
-    ProjectStore.emitChange();
     // update the storage
     var updateData = {};
     updateData[PROJECTS_STORAGE] = _projects;
     updateData[MAX_PROJECT_ID] = id;
     chrome.storage.sync.set(updateData, function () {
     });
+    ProjectStore.emitChange();
   })
   .catch(function (e) {
     id++;
     _projects[id] = newProject;
     console.log('created but error');
-    console.log(e);
+    console.error(e);
     ProjectStore.emitChange();
   });
 }
@@ -60,28 +60,23 @@ function destroy(id) {
 var ProjectStore = assign({}, EventEmitter.prototype, {
 
   /**
-   * Get the entire collection of tasks.
+   * Get the entire collection of projects.
    * @return {object}
    */
   getAll: function() {
-    return _.filter(_projects, function (p, id) {
-      return !isNaN(id);
-    });
+    return _projects;
   },
 
   /**
    * Load the projects from chrome storage.
-   * @return {promise}
+   * @return {Promise}
    */
   loadProjects: function () {
     return new Promise(function (resolve, reject) {
-      var loaded = false;
       chrome.storage.sync.get([PROJECTS_STORAGE, MAX_PROJECT_ID], function (items) {
-        _projects = items[PROJECTS_STORAGE];
-        if (!isNaN(items[MAX_PROJECT_ID])) {
-          id = Math.max(id, items[MAX_PROJECT_ID]);
-        }
-        loaded = true;
+        console.log('retrieved projects: ', items);
+        _projects = _.isEmpty(items[PROJECTS_STORAGE]) ? _projects : items[PROJECTS_STORAGE];
+        id = isNaN(items[MAX_PROJECT_ID]) ? id : Math.max(id, items[MAX_PROJECT_ID]);
         resolve(items);
       });
     });

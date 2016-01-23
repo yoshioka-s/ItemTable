@@ -16,13 +16,13 @@ function isValid (item) {
  */
 var TaskForm = React.createClass({
   propTypes: {
-    projects: React.PropTypes.array.isRequired
+    projects: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
     return {
       name: '',
-      project: {id: -1}
+      projectId: -1
     };
   },
 
@@ -35,7 +35,9 @@ var TaskForm = React.createClass({
   },
 
   handleProjectChange: function (project) {
-    this.setState({project: project});
+    console.log('change');
+    console.log(project);
+    this.setState({projectId: project.id});
   },
 
   handleSubmit: function (e) {
@@ -46,7 +48,7 @@ var TaskForm = React.createClass({
       return;
     }
 
-    TaskActions.create(this.state);
+    TaskActions.create(this.state.name, this.state.projectId);
     // reset name
     this.setState({name: ''});
     this.nameInput.focus();
@@ -59,7 +61,7 @@ var TaskForm = React.createClass({
       projectOptions.push(
         <li key={projectId}>
           <a href="#"
-            value={project.id}
+            value={projectId}
             onClick={() => {handleProjectChange(project)}}>
             {project.name}
           </a>
@@ -76,8 +78,8 @@ var TaskForm = React.createClass({
         <input className="name-input"
           name="name"
           type="text"
+          placeholder="ENTER TASK NAME"
           ref={ (ref) => this.nameInput = ref }
-          placeholder="ENTER ITEM"
           value={this.state.name}
           onChange={this.handleNameChange}
         />
@@ -88,7 +90,7 @@ var TaskForm = React.createClass({
             aria-haspopup="true"
             aria-expanded="false"
             ref={ (ref) => this.projectInput = ref }>
-            {this.state.project.id < 0 ? "CHOOSE PROJECT" : this.state.project.name}
+            {this.state.projectId < 0 ? "CHOOSE PROJECT" : this.props.projects[this.state.projectId].name}
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu">

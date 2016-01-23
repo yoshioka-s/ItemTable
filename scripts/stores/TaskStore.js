@@ -17,32 +17,37 @@ var id = 0;
  * Create a task.
  * @param {object} task
  */
-function create(task) {
-  var newTask = {
-    id: id,
-    complete: false,
-    name: task.name,
-    project: task.project,
-    time: 0,
-    isRunning: false,
-    startDate: null
-  };
-
+function create(taskName, projectId) {
+  console.log('test!');
+  console.log(taskName, projectId);
   // sync with the tasks storage before update
   TaskStore.loadTasks()
   .then(function () {
+    console.log('loaded');
     id++;
+    var newTask = {
+      id: id,
+      complete: false,
+      name: taskName,
+      projectId: projectId,
+      time: 0,
+      isRunning: false,
+      startDate: null
+    };
     _tasks[id] = newTask;
-    TaskStore.emitChange();
     // save in chrome data store
     var updateData = {maxId: id};
     updateData[TASKS_STORAGE] = _tasks;
     updateData[MAX_TASK_ID] = id;
+    console.log('save task');
     chrome.storage.sync.set(updateData, function () {
       console.log('saved: ', _tasks);
     });
+    TaskStore.emitChange();
+  })
+  .catch(function (e) {
+    console.error(e);
   });
-  _displayTasks[id+1] = newTask;
 }
 
 /**
@@ -50,6 +55,8 @@ function create(task) {
  * @param {string} id
  */
 function destroy(id) {
+  console.log('destoroy', id);
+  console.log(_tasks);
   delete _tasks[id];
   delete _displayTasks[id];
 }
@@ -124,7 +131,7 @@ var TaskStore = assign({}, EventEmitter.prototype, {
     return new Promise(function (resolve, reject) {
       chrome.storage.sync.get([TASKS_STORAGE, MAX_TASK_ID], function (items) {
         console.log('retrieved tasks: ', items);
-        _tasks = items[TASKS_STORAGE];
+        _tasks = items[TASKS_STORAGE] || {};
         if (!isNaN(items[MAX_TASK_ID])) {
           id = Math.max(id, items[MAX_TASK_ID]);
         }
@@ -164,8 +171,8 @@ var TaskStore = assign({}, EventEmitter.prototype, {
 
     switch(action.actionType) {
       case TaskConstants.CREATE:
-        if (action.task.name !== '') {
-          create(action.task);
+        if (action.taskName !== '') {
+          create(action.taskName, action.projectId);
           TaskStore.emitChange();
         }
         break;

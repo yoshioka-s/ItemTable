@@ -4,7 +4,7 @@ var util = require('../helpers/util.js');
 
 var Task = React.createClass({
   propTypes: {
-    item: React.PropTypes.object.isRequired,
+    task: React.PropTypes.object.isRequired,
     id: React.PropTypes.number.isRequired,
     isEven: React.PropTypes.bool.isRequired
   },
@@ -14,7 +14,7 @@ var Task = React.createClass({
   },
 
   handleRun: function (e) {
-    if (this.props.item.isRunning) {
+    if (this.props.task.isRunning) {
       TaskActions.stop(this.props.id);
     } else {
       TaskActions.run(this.props.id);
@@ -23,14 +23,14 @@ var Task = React.createClass({
 
   render: function() {
     var color = this.props.isEven ? 'even' : 'odd';
-    if (this.props.item.isRunning) {
+    if (this.props.task.isRunning) {
       color = 'running';
     }
 
     return (
       <li className={`item ${color}`}>
-        {this.props.item.name}
-        <span className="time"> ({util.millisecondToString(this.props.item.time)})</span>
+        {this.props.task.name}
+        <span className="time"> ({util.millisecondToString(this.props.task.time)})</span>
         <span className="btn run-btn btn-info"
           onClick={this.handleRun}
         >

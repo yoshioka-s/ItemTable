@@ -5,6 +5,7 @@
 */
 body {
   background-color: $background-color;
+  width: $body-width;
   color: $main-color;
   font: {
     family: $base-font;
@@ -139,10 +140,12 @@ header {
 }
 
 /*
-  ItemList component
+  Project component
 */
-.item-list {
+.project {
   height: $list-height;
+  width: 25%;
+  box-sizing: border-box;
   border: {
     width: $base-border-width;
     style: solid;
@@ -155,10 +158,10 @@ header {
     overflow-y: scroll;
   }
 }
-.item-list:first-child {
+.project:first-child {
   border-left-width: $base-border-width * 2;
 }
-.item-list:last-child {
+.project:last-child {
   border-right-width: $base-border-width * 2;
 }
 // header of each projects
@@ -233,10 +236,3 @@ header {
   width: 90%;
   margin: auto;
 }
-// .tab-content .tab-pane {
-//   display: none;
-// }
-//
-// .tab-content .tab-pane.active {
-//   display: block;
-// }

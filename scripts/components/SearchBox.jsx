@@ -11,7 +11,6 @@ var Task = React.createClass({
   render: function() {
     return (
       <div className='search-box'>
-        SEARCH AN ITEM
         <i className="icon-search glyphicon glyphicon-search"></i>
         <input
           placeholder="SEARCH"

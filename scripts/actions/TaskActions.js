@@ -10,10 +10,11 @@ var TaskActions = {
   /**
    * @param  {object} task
    */
-  create: function(task) {
+  create: function(taskName, projectId) {
     AppDispatcher.handleViewAction({
       actionType: TaskConstants.CREATE,
-      task: task
+      taskName: taskName,
+      projectId: projectId
     });
   },
 
