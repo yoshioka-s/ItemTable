@@ -17,6 +17,7 @@ var id = -1;
  * @param {string} name
  */
 function create(name) {
+  console.log(name);
   var newProject = {
     id: id,
     complete: false,
@@ -30,6 +31,7 @@ function create(name) {
   .then(function () {
     id++;
     _projects[id] = newProject;
+    console.log('created');
     ProjectStore.emitChange();
     // update the storage
     var updateData = {};
@@ -37,6 +39,13 @@ function create(name) {
     updateData[MAX_PROJECT_ID] = id;
     chrome.storage.sync.set(updateData, function () {
     });
+  })
+  .catch(function (e) {
+    id++;
+    _projects[id] = newProject;
+    console.log('created but error');
+    console.log(e);
+    ProjectStore.emitChange();
   });
 }
 
@@ -66,11 +75,13 @@ var ProjectStore = assign({}, EventEmitter.prototype, {
    */
   loadProjects: function () {
     return new Promise(function (resolve, reject) {
+      var loaded = false;
       chrome.storage.sync.get([PROJECTS_STORAGE, MAX_PROJECT_ID], function (items) {
         _projects = items[PROJECTS_STORAGE];
         if (!isNaN(items[MAX_PROJECT_ID])) {
           id = Math.max(id, items[MAX_PROJECT_ID]);
         }
+        loaded = true;
         resolve(items);
       });
     });

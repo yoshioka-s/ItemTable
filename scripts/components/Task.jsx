@@ -2,7 +2,7 @@ var React = require('react');
 var TaskActions = require('../actions/TaskActions.js');
 var util = require('../helpers/util.js');
 
-var Item = React.createClass({
+var Task = React.createClass({
   propTypes: {
     item: React.PropTypes.object.isRequired,
     id: React.PropTypes.number.isRequired,
@@ -46,4 +46,4 @@ var Item = React.createClass({
   }
 });
 
-module.exports = Item;
+module.exports = Task;

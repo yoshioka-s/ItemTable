@@ -1,5 +1,5 @@
 var React = require('react');
-var Item = require('./Item.jsx');
+var Task = require('./Task.jsx');
 var TaskActions = require('../actions/TaskActions.js');
 
 function showTaskForm(projectIndex) {
@@ -15,16 +15,8 @@ var Project = React.createClass({
 
   render: function() {
     var items = this.props.items.map(function (item, i) {
-      return (<Item item={item} key={i} isEven={i % 2 === 0} id={item.id}/>);
+      return (<Task item={item} key={i} isEven={i % 2 === 0} id={item.id}/>);
     });
-    // add a new new item button as a last item
-    items.push(<button
-                  className="btn btn-sm btn-default"
-                  value="New Task +"
-                  key="newTask"
-                  data-toggle="modal"
-                  data-target="#newtaskform"
-                  onClick={showTaskForm(this.props.index)}/>);
 
     var className = 'item-list';
     if (items.length > 7) {
