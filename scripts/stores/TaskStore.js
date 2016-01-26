@@ -18,12 +18,9 @@ var id = 0;
  * @param {object} task
  */
 function create(taskName, projectId) {
-  console.log('test!');
-  console.log(taskName, projectId);
   // sync with the tasks storage before update
   TaskStore.loadTasks()
   .then(function () {
-    console.log('loaded');
     id++;
     var newTask = {
       id: id,
@@ -36,17 +33,12 @@ function create(taskName, projectId) {
     };
     _tasks[id] = newTask;
     // save in chrome data store
-    var updateData = {maxId: id};
+    var updateData = {};
     updateData[TASKS_STORAGE] = _tasks;
     updateData[MAX_TASK_ID] = id;
-    console.log('save task');
     chrome.storage.sync.set(updateData, function () {
-      console.log('saved: ', _tasks);
     });
     TaskStore.emitChange();
-  })
-  .catch(function (e) {
-    console.error(e);
   });
 }
 
@@ -85,7 +77,7 @@ function run(id) {
     if (task.isRunning) {
       puase(taskId);
     }
-  })
+  });
   // mark the task as running
   var task = _tasks[id];
   task.isRunning = true;
@@ -93,7 +85,19 @@ function run(id) {
 }
 
 /**
- * Stop running a task.
+ * Pause a running task.
+ * @param {number} id
+ */
+function complete(id) {
+  var task = _tasks[id];
+  if (task.isRunning) {
+    puase(id);
+  }
+  task.complete = true;
+}
+
+/**
+ * Mark the task as completed.
  * @param {number} id
  */
 function puase(id) {
@@ -108,6 +112,15 @@ function puase(id) {
  */
 function prepare(projectId) {
   _newTask.project = projectId;
+}
+
+/**
+ * update the storage data
+ */
+function update() {
+  var updateData = {};
+  updateData[TASKS_STORAGE] = _tasks;
+  chrome.storage.sync.set(updateData);
 }
 
 var TaskStore = assign({}, EventEmitter.prototype, {
@@ -184,6 +197,7 @@ var TaskStore = assign({}, EventEmitter.prototype, {
 
       case TaskConstants.DESTROY:
         destroy(action.id);
+        update();
         TaskStore.emitChange();
         break;
 
@@ -194,13 +208,22 @@ var TaskStore = assign({}, EventEmitter.prototype, {
 
       case TaskConstants.RUN:
         run(action.id);
+        update();
         TaskStore.emitChange();
         break;
 
       case TaskConstants.PAUSE:
         puase(action.id);
+        update();
         TaskStore.emitChange();
         break;
+
+      case TaskConstants.COMPLETE:
+        complete(action.id);
+        update();
+        TaskStore.emitChange();
+        break;
+
       case TaskConstants.NEW:
         prepare(action.projectId);
         TaskStore.emitChange();

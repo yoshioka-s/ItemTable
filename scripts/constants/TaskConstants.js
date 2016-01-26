@@ -6,5 +6,6 @@ module.exports = keyMirror({
   FILTER:  null,
   RUN:     null,
   PAUSE:    null,
+  COMPLETE: null,
   PREPARE: null
 });
