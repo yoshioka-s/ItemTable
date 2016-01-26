@@ -2,7 +2,7 @@ var React = require('react');
 var _ = require('underscore');
 var TaskForm = require('./TaskForm.jsx');
 var ProjectForm = require('./ProjectForm.jsx');
-var Project = require('./Project.jsx');
+var Task = require('./Task.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var TaskStore = require('../stores/TaskStore');
 var ProjectStore = require('../stores/ProjectStore');
@@ -62,23 +62,19 @@ var MainSection = React.createClass({
 
   render: function() {
     var allProjects = ProjectStore.getAll();
-    var projects = [];
     // var displayTasks = this.state.displayTasks;
     var displayTasks = this.state.allTasks;
 
-    // build Project elements
-    _.each(allProjects, function (project, projectId) {
-      var propTasks = _.filter(displayTasks, function (task, key) {
-        return Number(task.projectId) === Number(projectId);
-      });
-      projects.push(
-        <Project className='col-sm-6'
-          key={projectId}
-          name={project.name}
-          index={projectId}
-          tasks={propTasks}
+    // build Task elements
+    var isEven = true;
+    var tasks = _.map(displayTasks, function (task, taskId) {
+      isEven = !isEven;
+      return <Task
+        task={task}
+        id={taskId}
+        isEven={isEven}
+        key={taskId}
         />
-      );
     });
 
     return (
@@ -89,7 +85,7 @@ var MainSection = React.createClass({
         />
 
         <div className='display-section'>
-          {projects}
+          {tasks}
         </div>
 
         <button className="btn btn-info"

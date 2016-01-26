@@ -55,8 +55,6 @@ function create(taskName, projectId) {
  * @param {string} id
  */
 function destroy(id) {
-  console.log('destoroy', id);
-  console.log(_tasks);
   delete _tasks[id];
   delete _displayTasks[id];
 }
