@@ -61,3 +61,16 @@ $modal-width: 400px;
     weight: 200;
   }
 }
+
+// common styling of task buttons
+@mixin task-btn {
+  position: relative;
+  float: right;
+  right: 20px;
+  width: $font-size-base * 2;
+  padding: 6px;
+  text-align: center;
+  &:hover {
+    color: orange;
+  }
+}

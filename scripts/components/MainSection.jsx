@@ -71,14 +71,14 @@ var MainSection = React.createClass({
       isEven = !isEven;
       return <Task
         task={task}
-        id={taskId}
+        id={Number(taskId)}
         isEven={isEven}
         key={taskId}
         />
     });
 
     return (
-      <div>
+      <div className='row'>
 
         <SearchBox
           updateFilter={this._updateFilter}
@@ -91,8 +91,9 @@ var MainSection = React.createClass({
         <button className="btn btn-info"
           data-toggle="modal"
           data-target="#modal-form">
-          +
+          New Task / Project
         </button>
+
         <div className="modal fade modal-dialog"
           id="modal-form"
           role="dialog">
@@ -100,9 +101,9 @@ var MainSection = React.createClass({
             <div className="modal-header">
               <button className="btn btn-sm close-btn"
                 data-dismiss="modal">
-                x
+                <i className="glyphicon glyphicon-remove"></i>
               </button>
-              <h4 className="modal-title">New</h4>
+              <h4 className="modal-title">Add New Task</h4>
             </div>
             <div  className="modal-body">
               <ul className="nav nav-tabs" role="tablist" id="newTabs">

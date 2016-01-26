@@ -13,12 +13,16 @@ var Task = React.createClass({
     TaskActions.destroy(this.props.id);
   },
 
+  handleComplete: function (e) {
+    TaskActions.complete(this.props.id);
+  },
+
   handleRun: function (e) {
-    if (this.props.task.isRunning) {
-      TaskActions.stop(this.props.id);
-    } else {
-      TaskActions.run(this.props.id);
-    }
+    TaskActions.run(this.props.id);
+  },
+
+  handlePause: function (e) {
+    TaskActions.pause(this.props.id);
   },
 
   render: function() {
@@ -28,20 +32,31 @@ var Task = React.createClass({
     }
 
     return (
-      <li className={`item ${color}`}>
+      <div className={`item ${color} col-sm-6`}>
         {this.props.task.name}
-        <span className="time"> ({util.millisecondToString(this.props.task.time)})</span>
-        <span className="btn run-btn btn-info"
-          onClick={this.handleRun}
-        >
-          run/stop
-        </span>
         <span className="btn del-btn"
           onClick={this.handleDelete}
         >
           <i className="glyphicon glyphicon-remove"></i>
         </span>
-      </li>
+        <span className="btn comp-btn"
+          onClick={this.handleComplete}
+        >
+          <i className="glyphicon glyphicon-ok"></i>
+        </span>
+        <span className={`btn run-btn ${this.props.task.isRunning ? 'hide' : ''}`}
+          onClick={this.handleRun}
+        >
+          <i className="glyphicon glyphicon-play"></i>
+        </span>
+        <span className={`btn run-btn ${this.props.task.isRunning ? '' : 'hide'}`}
+          onClick={this.handlePause}
+        >
+          <i className="glyphicon glyphicon-pause"></i>
+        </span>
+        <br/>
+        <span className="time"> ({util.millisecondToString(this.props.task.time)})</span>
+      </div>
     );
   }
 });

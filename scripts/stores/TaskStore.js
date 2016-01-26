@@ -80,6 +80,13 @@ function filterByName(word) {
  * @param {number} id
  */
 function run(id) {
+  // puase the running task
+  _.each(_tasks, function (task, taskId) {
+    if (task.isRunning) {
+      puase(taskId);
+    }
+  })
+  // mark the task as running
   var task = _tasks[id];
   task.isRunning = true;
   task.startDate = new Date();
@@ -89,7 +96,7 @@ function run(id) {
  * Stop running a task.
  * @param {number} id
  */
-function stop(id) {
+function puase(id) {
   var task = _tasks[id];
   task.isRunning = false;
   task.time += new Date() - task.startDate;
@@ -190,8 +197,8 @@ var TaskStore = assign({}, EventEmitter.prototype, {
         TaskStore.emitChange();
         break;
 
-      case TaskConstants.STOP:
-        stop(action.id);
+      case TaskConstants.PAUSE:
+        puase(action.id);
         TaskStore.emitChange();
         break;
       case TaskConstants.NEW:

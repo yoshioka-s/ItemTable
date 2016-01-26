@@ -51,9 +51,9 @@ var TaskActions = {
   /**
    * @param  {number} id of the item
    */
-  stop: function(id) {
+  pause: function(id) {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.STOP,
+      actionType: TaskConstants.PAUSE,
       id: id
     });
   },
