@@ -39,17 +39,17 @@ var Task = React.createClass({
         >
           <i className="glyphicon glyphicon-remove"></i>
         </span>
-        <span className="btn comp-btn"
+        <span className={`btn comp-btn ${this.props.task.complete ? 'hide' : ''}`}
           onClick={this.handleComplete}
         >
           <i className="glyphicon glyphicon-ok"></i>
         </span>
-        <span className={`btn run-btn ${this.props.task.isRunning ? 'hide' : ''}`}
+        <span className={`btn run-btn ${this.props.task.isRunning || this.props.task.complete ? 'hide' : ''}`}
           onClick={this.handleRun}
         >
           <i className="glyphicon glyphicon-play"></i>
         </span>
-        <span className={`btn run-btn ${this.props.task.isRunning ? '' : 'hide'}`}
+        <span className={`btn run-btn ${!this.props.task.isRunning || this.props.task.complete ? 'hide' : ''}`}
           onClick={this.handlePause}
         >
           <i className="glyphicon glyphicon-pause"></i>
