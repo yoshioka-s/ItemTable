@@ -66,7 +66,7 @@ var MainSection = React.createClass({
     var displayTasks = this.state.allTasks;
 
     // build Task elements
-    var isEven = true;
+    var isEven = false;
     var tasks = _.map(displayTasks, function (task, taskId) {
       if (isNaN(taskId)) {
         console.log(taskId, 'is in task id!!');

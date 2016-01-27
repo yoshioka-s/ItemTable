@@ -6,6 +6,7 @@
 body {
   background-color: $background-color;
   width: $body-width;
+  min-height: $list-height * 2;
   color: $main-color;
   font: {
     family: $base-font;
