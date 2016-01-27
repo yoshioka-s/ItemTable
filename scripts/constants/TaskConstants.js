@@ -5,6 +5,7 @@ module.exports = keyMirror({
   CREATE:  null,
   FILTER:  null,
   RUN:     null,
-  STOP:    null,
+  PAUSE:    null,
+  COMPLETE: null,
   PREPARE: null
 });

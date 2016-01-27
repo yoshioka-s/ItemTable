@@ -2,7 +2,7 @@ var React = require('react');
 var _ = require('underscore');
 var TaskForm = require('./TaskForm.jsx');
 var ProjectForm = require('./ProjectForm.jsx');
-var Project = require('./Project.jsx');
+var Task = require('./Task.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var TaskStore = require('../stores/TaskStore');
 var ProjectStore = require('../stores/ProjectStore');
@@ -62,41 +62,41 @@ var MainSection = React.createClass({
 
   render: function() {
     var allProjects = ProjectStore.getAll();
-    var projects = [];
     // var displayTasks = this.state.displayTasks;
     var displayTasks = this.state.allTasks;
 
-    // build Project elements
-    _.each(allProjects, function (project, projectId) {
-      var propTasks = _.filter(displayTasks, function (task, key) {
-        return Number(task.projectId) === Number(projectId);
-      });
-      projects.push(
-        <Project className='col-sm-6'
-          key={projectId}
-          name={project.name}
-          index={projectId}
-          tasks={propTasks}
+    // build Task elements
+    var isEven = false;
+    var tasks = _.map(displayTasks, function (task, taskId) {
+      if (isNaN(taskId)) {
+        console.log(taskId, 'is in task id!!');
+      }
+      isEven = !isEven;
+      return <Task
+        task={task}
+        id={taskId}
+        isEven={isEven}
+        key={taskId}
         />
-      );
     });
 
     return (
-      <div>
+      <div className='row'>
 
         <SearchBox
           updateFilter={this._updateFilter}
         />
 
         <div className='display-section'>
-          {projects}
+          {tasks}
         </div>
 
         <button className="btn btn-info"
           data-toggle="modal"
           data-target="#modal-form">
-          +
+          New Task / Project
         </button>
+
         <div className="modal fade modal-dialog"
           id="modal-form"
           role="dialog">
@@ -104,9 +104,9 @@ var MainSection = React.createClass({
             <div className="modal-header">
               <button className="btn btn-sm close-btn"
                 data-dismiss="modal">
-                x
+                <i className="glyphicon glyphicon-remove"></i>
               </button>
-              <h4 className="modal-title">New</h4>
+              <h4 className="modal-title">Add New Task</h4>
             </div>
             <div  className="modal-body">
               <ul className="nav nav-tabs" role="tablist" id="newTabs">

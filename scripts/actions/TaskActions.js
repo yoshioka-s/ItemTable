@@ -19,7 +19,7 @@ var TaskActions = {
   },
 
   /**
-   * @param  {number} id of the item
+   * @param  {number} id of the task
    */
   destroy: function(id) {
     AppDispatcher.handleViewAction({
@@ -39,7 +39,7 @@ var TaskActions = {
   },
 
   /**
-   * @param  {number} id of the item
+   * @param  {number} id of the task
    */
   run: function(id) {
     AppDispatcher.handleViewAction({
@@ -49,11 +49,21 @@ var TaskActions = {
   },
 
   /**
-   * @param  {number} id of the item
+   * @param  {number} id of the task
    */
-  stop: function(id) {
+  pause: function(id) {
     AppDispatcher.handleViewAction({
-      actionType: TaskConstants.STOP,
+      actionType: TaskConstants.PAUSE,
+      id: id
+    });
+  },
+
+  /**
+   * @param  {number} id of the task
+   */
+  complete: function (id) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.COMPLETE,
       id: id
     });
   },

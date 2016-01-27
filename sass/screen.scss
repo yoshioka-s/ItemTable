@@ -6,6 +6,7 @@
 body {
   background-color: $background-color;
   width: $body-width;
+  min-height: $list-height * 2;
   color: $main-color;
   font: {
     family: $base-font;
@@ -111,6 +112,10 @@ header {
   }
 }
 
+.modal-title {
+  color: $darker-gray;
+}
+
 /*
   SearchBox component
 */
@@ -175,17 +180,18 @@ header {
   Items component
 */
 .item {
-  @include base-component;
+  height: base-component;
   position: relative;
-  padding: {
-    left: 15px;
-  }
+  padding: 5px 0 5px 15px;
   &.even {
     background-color: $light-gray;
     color: $background-color;
     .del-btn {
       color: $base-gray;
       border-color: $base-gray;
+      &:hover {
+        color: orange;
+      }
     }
   }
   &.odd {
@@ -193,6 +199,9 @@ header {
     .del-btn {
       color: $light-gray;
       border-color: $light-gray;
+      &:hover {
+        color: orange;
+      }
     }
   }
   &.running {
@@ -200,23 +209,29 @@ header {
     .del-btn {
       color: $main-color;
       border-color: $main-color;
+      &:hover {
+        color: orange;
+      }
     }
   }
 }
-// delete button
+// task operation buttons
 .del-btn {
-  position: absolute;
-  right: 20px;
-  top: 16px;
-  width: $font-size-base * 2;
-  padding: 6px;
-  text-align: center;
+  @include task-btn;
+  border-color: red;
+  color: red;
 }
-// run btn
-.run-btn {
-  border {
-    color: $main-color;
-    width: 1px;
+.comp-btn {
+  @include task-btn;
+  border-color: green;
+  color: green;
+}
+.run-btn, .pause-btn {
+  @include task-btn;
+  border-color: rgb(29, 0, 110);
+  color: rgb(29, 0, 110);
+  &.hide {
+    display: none;
   }
 }
 
@@ -225,10 +240,15 @@ header {
 */
 
 .close-btn {
+  float: right;
+  width: $font-size-base * 2;
+  height: $font-size-base * 2;
   position: relative;
-  width: 50px;
-  height: 50px;
   right: 10px;
+  margin-top: 0;
+  border-color: $darker-gray;
+  background-color: inherit;
+  color: $darker-gray;
 }
 .modal {
   position: fixed;
