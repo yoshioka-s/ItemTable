@@ -73,6 +73,7 @@ function filterByName(word) {
  */
 function run(id) {
   // puase the running task
+  console.log(_tasks);
   _.each(_tasks, function (task, taskId) {
     if (task.isRunning) {
       puase(taskId);
@@ -81,7 +82,7 @@ function run(id) {
   // mark the task as running
   var task = _tasks[id];
   task.isRunning = true;
-  task.startDate = new Date();
+  task.startDate = new Date().getTime();
 }
 
 /**
@@ -103,7 +104,10 @@ function complete(id) {
 function puase(id) {
   var task = _tasks[id];
   task.isRunning = false;
+  console.log(task.startDate);
   task.time += new Date() - task.startDate;
+  console.log('pause');
+  console.log(task.time);
 }
 
 /**
@@ -120,6 +124,7 @@ function prepare(projectId) {
 function update() {
   var updateData = {};
   updateData[TASKS_STORAGE] = _tasks;
+  console.log('update!', updateData);
   chrome.storage.sync.set(updateData);
 }
 
