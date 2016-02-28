@@ -29,7 +29,8 @@ function create(taskName, projectId) {
       projectId: projectId,
       time: 0,
       isRunning: false,
-      startDate: null
+      startDate: null,
+      bookmarks: []
     };
     _tasks[id] = newTask;
     // save in chrome data store
@@ -73,7 +74,6 @@ function filterByName(word) {
  */
 function run(id) {
   // puase the running task
-  console.log(_tasks);
   _.each(_tasks, function (task, taskId) {
     if (task.isRunning) {
       puase(taskId);
@@ -83,6 +83,8 @@ function run(id) {
   var task = _tasks[id];
   task.isRunning = true;
   task.startDate = new Date().getTime();
+  // open its bookmarks
+  openBookmarks(id);
 }
 
 /**
@@ -106,8 +108,6 @@ function puase(id) {
   task.isRunning = false;
   console.log(task.startDate);
   task.time += new Date() - task.startDate;
-  console.log('pause');
-  console.log(task.time);
 }
 
 /**
@@ -119,14 +119,57 @@ function prepare(projectId) {
 }
 
 /**
+ * add active tab to a task bookmark.
+ * @param {number} id of target task (opptional)
+ */
+function addUrl(id) {
+  id = id || TaskStore.getRunningTask();
+  chrome.tabs.query({active: true}, function (tabs) {
+    var bookmarks = _tasks[id].bookmarks || [];
+    bookmarks.push(tabs[0]);
+    _tasks[id].bookmarks = bookmarks;
+  });
+}
+
+/**
+ * remove the url from a task bookmark.
+ * @param {string} url to remove
+ */
+function removeUrl(url, id) {
+  id = id || TaskStore.getRunningTask();
+  var bookmarks = _tasks[id].bookmarks || [];
+  bookmarks = _.filter(bookmarks, function (bookmark) {
+    return bookmark.url !== url;
+  });
+  _tasks[id].bookmarks = bookmarks;
+}
+
+/**
  * update the storage data
  */
 function update() {
   var updateData = {};
   updateData[TASKS_STORAGE] = _tasks;
-  console.log('update!', updateData);
   chrome.storage.sync.set(updateData);
 }
+
+/**
+ * open the bookmarks of a task
+ * @param {number} task id
+ */
+function openBookmarks(id) {
+  var bookmarks = _tasks[id].bookmarks;
+  // open bookmark in a new tab if it's not opened
+  chrome.tabs.query({}, function (tabs) {
+    _.each(bookmarks, function (bookmark) {
+      if (!_.any(tabs, function (tab) {
+        return tab.url === bookmark.url;
+      })) {
+        window.open(bookmark.url);
+      }
+    });
+  });
+ }
 
 var TaskStore = assign({}, EventEmitter.prototype, {
 
@@ -169,6 +212,19 @@ var TaskStore = assign({}, EventEmitter.prototype, {
    */
    getNewTask: function () {
      return _newTask;
+   },
+
+   /**
+   * Get the id of the running task
+   * @return {number}
+   */
+   getRunningTask: function () {
+     for (var id in _tasks) {
+       if (_tasks[id].isRunning) {
+         return id;
+       }
+     }
+     return null;
    },
 
   emitChange: function() {
@@ -231,6 +287,17 @@ var TaskStore = assign({}, EventEmitter.prototype, {
 
       case TaskConstants.NEW:
         prepare(action.projectId);
+        TaskStore.emitChange();
+        break;
+
+      case TaskConstants.BOOKMARK:
+        addUrl(action.id);
+        update();
+        TaskStore.emitChange();
+        break;
+      case TaskConstants.UN_BOOKMARK:
+        removeUrl(action.url, action.id);
+        update();
         TaskStore.emitChange();
         break;
     }

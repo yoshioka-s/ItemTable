@@ -4,8 +4,10 @@ var TaskForm = require('./TaskForm.jsx');
 var ProjectForm = require('./ProjectForm.jsx');
 var Task = require('./Task.jsx');
 var SearchBox = require('./SearchBox.jsx');
+var TaskActions = require('../actions/TaskActions.js');
 var TaskStore = require('../stores/TaskStore');
 var ProjectStore = require('../stores/ProjectStore');
+var util = require('../helpers/util.js');
 
 function getTaskState() {
   return {
@@ -24,23 +26,38 @@ var MainSection = React.createClass({
   },
 
   componentWillMount: function () {
-    var loaded = false;
+    var hasLoaded = {tasks:false, projects: false};
     var compoent = this;
     // setState if projects and tasks are both loaded
     function updateState() {
-      if (loaded) {
+      if (_.every(hasLoaded, _.indentity)) {
         compoent.setState(getTaskState());
       }
-      loaded = true;
     }
 
     TaskStore.loadTasks()
     .then(function () {
+      hasLoaded.tasks = true;
       updateState();
     });
     ProjectStore.loadProjects()
     .then(function () {
+      hasLoaded.projects = true;
       updateState();
+    });
+
+    // check if current tab is bookmarked in the running task
+    var runningTask = this.state.allTasks[TaskStore.getRunningTask()];
+    util.getCurrentTab()
+    .then(function (currentTab) {
+      console.log('runnning: ', runningTask);
+      var bookmarks = runningTask.bookmarks || [];
+      console.log('bookmarks: ', bookmarks);
+      compoent.setState({
+        isBookmarked: _.any(bookmarks, function (bookmark) {
+          currentTab.url === bookmark.url;
+        })
+      });
     });
   },
 
@@ -60,10 +77,46 @@ var MainSection = React.createClass({
     ProjectStore.removeChangeListener(this._onChange);
   },
 
+  handleStar: function () {
+    TaskActions.bookmarkActiveTab();
+    this.setState({isBookmarked: true});
+  },
+
+  handleRemoveStar: function () {
+    this.setState({isBookmarked: false});
+    util.getCurrentTab()
+    .then(function (currentTab) {
+      TaskActions.removeBookmark(currentTab.url);
+      console.log('removed!');
+    });
+  },
+
   render: function() {
+    console.log('render!');
     var allProjects = ProjectStore.getAll();
     // var displayTasks = this.state.displayTasks;
     var displayTasks = this.state.allTasks;
+    var runningTask = displayTasks[TaskStore.getRunningTask()];
+    var star;
+    if (runningTask) {
+      if (this.state.isBookmarked) {
+        star = <span
+          className="btn star-btn"
+          onClick={this.handleRemoveStar}
+          >
+          <i className="glyphicon glyphicon-star"></i>
+          remove from bookmark of {runningTask.name}
+        </span>
+      } else {
+        star = <span
+          className="btn star-btn"
+          onClick={this.handleStar}
+          >
+          <i className="glyphicon glyphicon-star-empty"></i>
+          add to bookmark of {runningTask.name}
+        </span>
+      }
+    }
 
     // build Task elements
     var isEven = false;
@@ -82,7 +135,8 @@ var MainSection = React.createClass({
 
     return (
       <div className='row'>
-
+        {runningTask ? 'You are working so hard!' : 'Tasks are waiting for you...'}
+        {star}
         <SearchBox
           updateFilter={this._updateFilter}
         />
