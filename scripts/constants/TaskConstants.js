@@ -7,5 +7,7 @@ module.exports = keyMirror({
   RUN:     null,
   PAUSE:    null,
   COMPLETE: null,
-  PREPARE: null
+  PREPARE: null,
+  BOOKMARK: null,
+  UN_BOOKMARK: null
 });

@@ -76,6 +76,26 @@ var TaskActions = {
       actionType: TaskConstants.PREPARE,
       projectId: projectId
     });
+  },
+
+  /**
+   * add the active tab to bookmark of the running task
+   */
+  bookmarkActiveTab: function() {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.BOOKMARK,
+    });
+  },
+
+  /**
+   * remove the url from bookmark of the running task
+   * @param {string} url
+   */
+  removeBookmark: function(url) {
+    AppDispatcher.handleViewAction({
+      actionType: TaskConstants.UN_BOOKMARK,
+      url: url
+    });
   }
 
 };

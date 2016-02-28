@@ -1,3 +1,4 @@
+var Promise = require('es6-promise').Promise;
 /**
  * Get formatted date string (yyyy/mm/dd hh:mm:ss)
  * @param {date} date
@@ -18,14 +19,27 @@ function dateToString(date) {
  * @param {number} millisecond
  * @return {string}
  */
- function millisecondToString(milsec) {
-   var hour = Math.floor(milsec / (1000 * 60 * 60));
-   var minute = Math.floor(milsec / (1000 * 60)) - hour * 60;
-   var second = Math.floor(milsec / (1000)) - hour * 3600 - minute * 60;
-   return `${hour}:${minute}:${second}`;
- }
+function millisecondToString(milsec) {
+  var hour = Math.floor(milsec / (1000 * 60 * 60));
+  var minute = Math.floor(milsec / (1000 * 60)) - hour * 60;
+  var second = Math.floor(milsec / (1000)) - hour * 3600 - minute * 60;
+  return `${hour}:${minute}:${second}`;
+}
+
+/**
+ * Get active tab
+ * @return {Promise}
+ */
+function getCurrentTab() {
+  return new Promise(function (resolve, reject) {
+    chrome.tabs.query({active: true}, function (tabs) {
+      resolve(tabs[0]);
+    });
+  });
+}
 
 module.exports = {
   dateToString: dateToString,
-  millisecondToString: millisecondToString
+  millisecondToString: millisecondToString,
+  getCurrentTab: getCurrentTab
 };
