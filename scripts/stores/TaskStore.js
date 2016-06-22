@@ -14,15 +14,15 @@ var _newTask = {name: '', project: null};
 var id = 0;
 
 /**
- * Create a task.
+ * Create a new task.
  * @param {object} task
  */
 function create(taskName, projectId) {
   // sync with the tasks storage before update
   TaskStore.loadTasks()
-  .then(function () {
+  .then(() => {
     id++;
-    var newTask = {
+    let newTask = {
       id: id,
       complete: false,
       name: taskName,
@@ -34,10 +34,11 @@ function create(taskName, projectId) {
     };
     _tasks[id] = newTask;
     // save in chrome data store
-    var updateData = {};
+    let updateData = {};
     updateData[TASKS_STORAGE] = _tasks;
     updateData[MAX_TASK_ID] = id;
-    chrome.storage.sync.set(updateData, function () {
+    chrome.storage.sync.set(updateData, () => {
+      // do nothing
     });
     TaskStore.emitChange();
   });
@@ -58,10 +59,10 @@ function destroy(id) {
  */
 function filterByName(word) {
   _displayTasks = _.chain(_tasks)
-  .filter(function (task) {
+  .filter( (task) => {
     return task.name.toLowerCase().indexOf(word.toLowerCase()) > -1;
   })
-  .reduce(function (memo, task) {
+  .reduce( (memo, task) => {
     memo[task.id] = task;
     return memo;
   }, {})
@@ -74,13 +75,13 @@ function filterByName(word) {
  */
 function run(id) {
   // puase the running task
-  _.each(_tasks, function (task, taskId) {
+  _.each(_tasks, (task, taskId) => {
     if (task.isRunning) {
       puase(taskId);
     }
   });
   // mark the task as running
-  var task = _tasks[id];
+  let task = _tasks[id];
   task.isRunning = true;
   task.startDate = new Date().getTime();
   // open its bookmarks
@@ -104,9 +105,8 @@ function complete(id) {
  * @param {number} id
  */
 function puase(id) {
-  var task = _tasks[id];
+  let task = _tasks[id];
   task.isRunning = false;
-  console.log(task.startDate);
   task.time += new Date() - task.startDate;
 }
 
@@ -120,37 +120,37 @@ function prepare(projectId) {
 
 /**
  * add active tab to a task bookmark.
- * @param {number} id of target task (opptional)
+ * @param {object} tab data
+ * @param {number} id of target task (optional)
  */
-function addUrl(id) {
-  id = id || TaskStore.getRunningTask();
-  chrome.tabs.query({active: true}, function (tabs) {
-    var bookmarks = _tasks[id].bookmarks || [];
-    bookmarks.push(tabs[0]);
-    _tasks[id].bookmarks = bookmarks;
-  });
+function addUrl(tab, id = TaskStore.getRunningTask()) {
+  let task = _tasks[id];
+  task.bookmarks.push(tab);
 }
 
 /**
  * remove the url from a task bookmark.
  * @param {string} url to remove
+ * @param {number} id of target task (optional)
  */
-function removeUrl(url, id) {
-  id = id || TaskStore.getRunningTask();
-  var bookmarks = _tasks[id].bookmarks || [];
-  bookmarks = _.filter(bookmarks, function (bookmark) {
+function removeUrl(url, id = TaskStore.getRunningTask()) {
+  task.bookmarks = _.filter(task.bookmarks, (bookmark) => {
     return bookmark.url !== url;
   });
-  _tasks[id].bookmarks = bookmarks;
 }
 
 /**
  * update the storage data
  */
 function update() {
-  var updateData = {};
-  updateData[TASKS_STORAGE] = _tasks;
+  let updateData = {};
+  // clone the object. otherwise it points to the same object so storage doesn't get updated
+  updateData[TASKS_STORAGE] = _.clone(_tasks);
+  console.log("UPDATE!!", updateData);
   chrome.storage.sync.set(updateData);
+  chrome.storage.sync.get([TASKS_STORAGE], function (items) {
+    console.log('UPDATED!!', items);
+  });
 }
 
 /**
@@ -158,13 +158,11 @@ function update() {
  * @param {number} task id
  */
 function openBookmarks(id) {
-  var bookmarks = _tasks[id].bookmarks;
+  let bookmarks = _tasks[id].bookmarks;
   // open bookmark in a new tab if it's not opened
-  chrome.tabs.query({}, function (tabs) {
-    _.each(bookmarks, function (bookmark) {
-      if (!_.any(tabs, function (tab) {
-        return tab.url === bookmark.url;
-      })) {
+  chrome.tabs.query({}, (tabs) => {
+    _.each(bookmarks, (bookmark) => {
+      if (!_.any(tabs, {url: bookmark.url})) {
         window.open(bookmark.url);
       }
     });
@@ -291,10 +289,11 @@ var TaskStore = assign({}, EventEmitter.prototype, {
         break;
 
       case TaskConstants.BOOKMARK:
-        addUrl(action.id);
+        addUrl(action.tab, action.id);
         update();
         TaskStore.emitChange();
         break;
+
       case TaskConstants.UN_BOOKMARK:
         removeUrl(action.url, action.id);
         update();
