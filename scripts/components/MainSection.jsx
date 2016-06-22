@@ -28,7 +28,7 @@ var MainSection = React.createClass({
   componentWillMount: function () {
     var hasLoaded = {tasks:false, projects: false};
     var compoent = this;
-    // setState if projects and tasks are both loaded
+    // setState if projects and tasks both have been loaded
     function updateState() {
       if (_.every(hasLoaded, _.indentity)) {
         compoent.setState(getTaskState());
@@ -51,10 +51,10 @@ var MainSection = React.createClass({
     util.getCurrentTab()
     .then(function (currentTab) {
       console.log('runnning: ', runningTask);
-      var bookmarks = runningTask.bookmarks || [];
+      var bookmarks = runningTask.bookmarks;
       console.log('bookmarks: ', bookmarks);
       compoent.setState({
-        isBookmarked: _.any(bookmarks, function (bookmark) {
+        isBookmarked: _.any(bookmarks, (bookmark) => {
           currentTab.url === bookmark.url;
         })
       });
@@ -78,16 +78,18 @@ var MainSection = React.createClass({
   },
 
   handleStar: function () {
-    TaskActions.bookmarkActiveTab();
-    this.setState({isBookmarked: true});
+    util.getCurrentTab()
+    .then( (currentTab) => {
+      TaskActions.bookmarkActiveTab(currentTab);
+      this.setState({isBookmarked: true});
+    })
   },
 
   handleRemoveStar: function () {
-    this.setState({isBookmarked: false});
     util.getCurrentTab()
-    .then(function (currentTab) {
+    .then( (currentTab) => {
       TaskActions.removeBookmark(currentTab.url);
-      console.log('removed!');
+      this.setState({isBookmarked: false});
     });
   },
 
@@ -100,34 +102,36 @@ var MainSection = React.createClass({
     var star;
     if (runningTask) {
       if (this.state.isBookmarked) {
-        star = <span
+        star =
+        <span
           className="btn star-btn"
           onClick={this.handleRemoveStar}
-          >
+        >
           <i className="glyphicon glyphicon-star"></i>
-          remove from bookmark of {runningTask.name}
+          remove from reference list of {runningTask.name}
         </span>
       } else {
-        star = <span
+        star =
+        <span
           className="btn star-btn"
           onClick={this.handleStar}
-          >
+        >
           <i className="glyphicon glyphicon-star-empty"></i>
-          add to bookmark of {runningTask.name}
+          add to reference list of {runningTask.name}
         </span>
       }
     }
 
     // build Task elements
     var isEven = false;
-    var tasks = _.map(displayTasks, function (task, taskId) {
+    var tasks = _.map(displayTasks, (task, taskId) => {
       if (isNaN(taskId)) {
         console.log(taskId, 'is in task id!!');
       }
       isEven = !isEven;
       return <Task
         task={task}
-        id={taskId}
+        id={parseInt(taskId)}
         isEven={isEven}
         key={taskId}
         />
@@ -136,7 +140,9 @@ var MainSection = React.createClass({
     return (
       <div className='row'>
         {runningTask ? 'You are working so hard!' : 'Tasks are waiting for you...'}
-        {star}
+        <p className='star-space'>
+          {star}
+        </p>
         <SearchBox
           updateFilter={this._updateFilter}
         />

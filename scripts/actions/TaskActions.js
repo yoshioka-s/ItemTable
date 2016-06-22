@@ -81,9 +81,10 @@ var TaskActions = {
   /**
    * add the active tab to bookmark of the running task
    */
-  bookmarkActiveTab: function() {
+  bookmarkActiveTab: function(tab) {
     AppDispatcher.handleViewAction({
       actionType: TaskConstants.BOOKMARK,
+      tab: tab
     });
   },
 

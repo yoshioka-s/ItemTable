@@ -115,9 +115,14 @@ header {
 .modal-title {
   color: $darker-gray;
 }
-
+.star-space {
+  height: 34px;
+}
 .star-btn {
-  color: rgb(180, 61, 95);
+  color: #b98493;
+  i {
+    margin-right: 10px;
+  }
 }
 
 /*
